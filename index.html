@@ -2004,7 +2004,9 @@ function renderTraining() {
 
 function toggleWeek(w) {
   const block = document.getElementById('week-block-' + w);
-  block.classList.toggle('open');
+  const isOpen = block.classList.contains('open');
+  document.querySelectorAll('.week-block').forEach(b => b.classList.remove('open'));
+  if (!isOpen) block.classList.add('open');
 }
 
 async function cycleTaskStatus(id) {
@@ -2552,6 +2554,13 @@ function toggleEosTool(headerEl) {
   const body = headerEl.nextElementSibling;
   const arrow = headerEl.querySelector('.eos-tool-arrow');
   const isOpen = body.style.display === 'block';
+  // Close all EOS tool panels first
+  document.querySelectorAll('[onclick^="toggleEosTool"]').forEach(h => {
+    h.nextElementSibling.style.display = 'none';
+    const a = h.querySelector('.eos-tool-arrow');
+    if (a) a.style.transform = 'rotate(0deg)';
+  });
+  // Open this one if it was closed
   body.style.display = isOpen ? 'none' : 'block';
   if (arrow) arrow.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
 }
