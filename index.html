@@ -403,8 +403,8 @@
     display: flex; align-items: center; justify-content: center;
     font-weight: 700; font-size: 13px; color: white;
   }
-  .log-avatar.jimmy { background: var(--navy); }
-  .log-avatar.bill { background: var(--gold); color: var(--navy-dark); }
+  .log-avatar.incoming { background: var(--navy); }
+  .log-avatar.leadership { background: var(--gold); color: var(--navy-dark); }
   .log-body { flex: 1; }
   .log-header { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
   .log-author { font-weight: 600; font-size: 13px; }
@@ -678,7 +678,7 @@
   <button class="nav-tab" data-view="knowledge">Knowledge Log</button>
   <button class="nav-tab" data-view="vendors">Vendors</button>
   <button class="nav-tab" data-view="locations">Locations</button>
-  <button class="nav-tab" data-view="askbill">Ask Bill</button>
+  <button class="nav-tab" data-view="askbill">Leadership Q&A</button>
   <button class="nav-tab" data-view="eos">⚙ EOS Framework</button>
 </nav>
 
@@ -687,11 +687,11 @@
   <!-- OVERVIEW -->
   <div id="view-overview" class="view active">
     <div class="overview-banner">
-      <h2>PHG Systems Transition — Jimmy Cannon</h2>
+      <h2>Systems Transition Hub</h2>
       <p>
-        This hub tracks my onboarding into PHG's technology stack. I've mapped every system, rated my honest starting proficiency,
-        and built an <span class="banner-gold">8-week training plan</span> so we can run this like a real project —
-        with documented SOPs and a knowledge log that outlasts both of us.
+        This hub tracks the transition into PHG's technology stack. Every system is mapped, proficiency levels are rated,
+        and an <span class="banner-gold">8-week training plan</span> runs this like a managed project —
+        with documented SOPs and a knowledge log built to outlast the transition.
       </p>
     </div>
 
@@ -731,18 +731,18 @@
       <div class="card">
         <div class="card-header">
           <div>
-            <div class="card-title">Bill's Priority Areas</div>
-            <div class="card-subtitle">From our conversation — where to focus first</div>
+            <div class="card-title">Leadership Priority Areas</div>
+            <div class="card-subtitle">Current leadership — where to focus first</div>
           </div>
         </div>
         <div class="stack">
           <div style="padding:10px; background:#fff7ed; border-radius:8px; border-left:3px solid var(--amber);">
-            <div style="font-size:12px; font-weight:700; color:#92400e; margin-bottom:4px;">⚠ Flagged by Bill</div>
+            <div style="font-size:12px; font-weight:700; color:#92400e; margin-bottom:4px;">⚠ Leadership Priority</div>
             <div style="font-size:13px; font-weight:600; margin-bottom:2px;">NCR CFC & Current Aloha Stack</div>
             <div style="font-size:12px; color:var(--muted);">CFC, web-based menu mgmt, digital ordering, consumer marketing — all newer than my Aloha experience</div>
           </div>
           <div style="padding:10px; background:#fff7ed; border-radius:8px; border-left:3px solid var(--amber);">
-            <div style="font-size:12px; font-weight:700; color:#92400e; margin-bottom:4px;">⚠ Flagged by Bill</div>
+            <div style="font-size:12px; font-weight:700; color:#92400e; margin-bottom:4px;">⚠ Leadership Priority</div>
             <div style="font-size:13px; font-weight:600; margin-bottom:2px;">Restaurant365 Operational Processes</div>
             <div style="font-size:12px; color:var(--muted);">Recipe configuration, menu management workflows, and current R365 ops — needs current-version depth</div>
           </div>
@@ -760,10 +760,9 @@
         <div class="card-title">Why This Hub Exists</div>
       </div>
       <p style="font-size:13px; color:var(--muted); line-height:1.8; max-width:700px;">
-        Bill's biggest concern about any successor is the transition risk — someone getting up to speed on 30+ integrated systems
-        while operations keep running. This hub is my answer to that concern. It turns the onboarding into a managed project:
-        transparent gaps, a clear learning sequence, and documentation built along the way. When I'm done, PHG will have a
-        knowledge base it's never had — useful for training my own eventual successor.
+        The biggest concern with any tech leadership transition is the knowledge gap — someone getting up to speed on 30+ integrated systems while operations keep running. This hub turns that risk into a managed project:
+        transparent gaps, a clear learning sequence, and documentation built along the way. When complete, PHG will have a
+        knowledge base it's never had — useful for training any eventual successor.
       </p>
     </div>
   </div>
@@ -813,7 +812,7 @@
       <button class="btn btn-primary btn-sm" onclick="openLogModal()">+ Add Entry</button>
     </div>
     <p style="font-size:13px; color:var(--muted); margin-bottom:20px; line-height:1.6;">
-      A running log of institutional knowledge — things Bill shares, things I discover, questions and answers.
+      A running log of institutional knowledge — captured during handoff, built through onboarding, and preserved for whoever holds this seat.
       Nothing gets lost in email or Slack.
     </p>
     <div id="knowledge-log" class="stack">
@@ -870,8 +869,8 @@
   <!-- ASK BILL -->
   <div id="view-askbill" class="view">
     <div class="askbill-banner">
-      <h2>Questions for Bill</h2>
-      <p>Never walk into a meeting without a prepared list.</p>
+      <h2>Leadership Q&A</h2>
+      <p>Prepared questions. Documented answers. Nothing left to memory.</p>
     </div>
     <div class="section-header" style="margin-bottom:16px;">
       <div class="filter-bar" id="question-filter-bar" style="margin-bottom:0;"></div>
@@ -901,37 +900,37 @@
           <div style="font-size:22px; margin-bottom:8px;">👁</div>
           <div class="card-title" style="margin-bottom:6px;">1. Vision</div>
           <p style="font-size:13px; color:var(--muted); line-height:1.7;">Everyone in the company sees the same destination and knows the path to get there. Captured in the V/TO — PHG's one-page strategic plan: Core Values, Core Focus, 10-Year Target, Marketing Strategy, 3-Year Picture, 1-Year Plan, and Rocks.</p>
-          <div style="margin-top:12px; font-size:11px; font-weight:700; color:#4f7942; letter-spacing:0.3px;">DEEP DIVE + ASK BILL →</div>
+          <div style="margin-top:12px; font-size:11px; font-weight:700; color:#4f7942; letter-spacing:0.3px;">DEEP DIVE + DISCUSS WITH LEADERSHIP →</div>
         </div>
         <div class="card" style="border-top:3px solid #4f7942; cursor:pointer; transition:all 0.15s;" onclick="openEosComponentModal('people')" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='var(--shadow-md)'" onmouseout="this.style.transform='none';this.style.boxShadow='var(--shadow)'">
           <div style="font-size:22px; margin-bottom:8px;">👥</div>
           <div class="card-title" style="margin-bottom:6px;">2. People</div>
           <p style="font-size:13px; color:var(--muted); line-height:1.7;">Right people, right seats. The Accountability Chart defines every function in the company and who owns it. The People Analyzer scores everyone on GWC: do they <em>Get it</em>, <em>Want it</em>, and have the <em>Capacity</em> to do it?</p>
-          <div style="margin-top:12px; font-size:11px; font-weight:700; color:#4f7942; letter-spacing:0.3px;">DEEP DIVE + ASK BILL →</div>
+          <div style="margin-top:12px; font-size:11px; font-weight:700; color:#4f7942; letter-spacing:0.3px;">DEEP DIVE + DISCUSS WITH LEADERSHIP →</div>
         </div>
         <div class="card" style="border-top:3px solid #4f7942; cursor:pointer; transition:all 0.15s;" onclick="openEosComponentModal('data')" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='var(--shadow-md)'" onmouseout="this.style.transform='none';this.style.boxShadow='var(--shadow)'">
           <div style="font-size:22px; margin-bottom:8px;">📊</div>
           <div class="card-title" style="margin-bottom:6px;">3. Data</div>
           <p style="font-size:13px; color:var(--muted); line-height:1.7;">The Scorecard: 5–15 weekly numbers that give an absolute pulse on the business. Numbers don't lie. No opinions, no feelings — if the number is on track, it's green. If not, it's red and goes on the Issues list.</p>
-          <div style="margin-top:12px; font-size:11px; font-weight:700; color:#4f7942; letter-spacing:0.3px;">DEEP DIVE + ASK BILL →</div>
+          <div style="margin-top:12px; font-size:11px; font-weight:700; color:#4f7942; letter-spacing:0.3px;">DEEP DIVE + DISCUSS WITH LEADERSHIP →</div>
         </div>
         <div class="card" style="border-top:3px solid #4f7942; cursor:pointer; transition:all 0.15s;" onclick="openEosComponentModal('issues')" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='var(--shadow-md)'" onmouseout="this.style.transform='none';this.style.boxShadow='var(--shadow)'">
           <div style="font-size:22px; margin-bottom:8px;">⚠️</div>
           <div class="card-title" style="margin-bottom:6px;">4. Issues</div>
           <p style="font-size:13px; color:var(--muted); line-height:1.7;">Identify, discuss, and solve (IDS). Issues get listed, prioritized by impact, and resolved in meetings using a structured process. No problem gets ignored, swept under the rug, or revisited every week without resolution.</p>
-          <div style="margin-top:12px; font-size:11px; font-weight:700; color:#4f7942; letter-spacing:0.3px;">DEEP DIVE + ASK BILL →</div>
+          <div style="margin-top:12px; font-size:11px; font-weight:700; color:#4f7942; letter-spacing:0.3px;">DEEP DIVE + DISCUSS WITH LEADERSHIP →</div>
         </div>
         <div class="card" style="border-top:3px solid #4f7942; cursor:pointer; transition:all 0.15s;" onclick="openEosComponentModal('process')" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='var(--shadow-md)'" onmouseout="this.style.transform='none';this.style.boxShadow='var(--shadow)'">
           <div style="font-size:22px; margin-bottom:8px;">📋</div>
           <div class="card-title" style="margin-bottom:6px;">5. Process</div>
           <p style="font-size:13px; color:var(--muted); line-height:1.7;">The "way we do things." Core processes are documented, simplified, and followed by everyone. This maps directly to the SOP work in this hub — every process I document becomes part of PHG's EOS process library.</p>
-          <div style="margin-top:12px; font-size:11px; font-weight:700; color:#4f7942; letter-spacing:0.3px;">DEEP DIVE + ASK BILL →</div>
+          <div style="margin-top:12px; font-size:11px; font-weight:700; color:#4f7942; letter-spacing:0.3px;">DEEP DIVE + DISCUSS WITH LEADERSHIP →</div>
         </div>
         <div class="card" style="border-top:3px solid #4f7942; cursor:pointer; transition:all 0.15s;" onclick="openEosComponentModal('traction')" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='var(--shadow-md)'" onmouseout="this.style.transform='none';this.style.boxShadow='var(--shadow)'">
           <div style="font-size:22px; margin-bottom:8px;">🚀</div>
           <div class="card-title" style="margin-bottom:6px;">6. Traction</div>
           <p style="font-size:13px; color:var(--muted); line-height:1.7;">Executing on the vision. Achieved through Rocks (90-day priorities) and L10 Meetings (weekly accountability). Traction is the bridge between big goals and daily action — where most companies without EOS break down.</p>
-          <div style="margin-top:12px; font-size:11px; font-weight:700; color:#4f7942; letter-spacing:0.3px;">DEEP DIVE + ASK BILL →</div>
+          <div style="margin-top:12px; font-size:11px; font-weight:700; color:#4f7942; letter-spacing:0.3px;">DEEP DIVE + DISCUSS WITH LEADERSHIP →</div>
         </div>
       </div>
     </div>
@@ -947,7 +946,7 @@
             <div style="flex:1;">
               <div class="card-title" style="margin-bottom:8px;">🪨 Rocks — 90-Day Priorities</div>
               <p style="font-size:13px; color:var(--muted); line-height:1.7; margin-bottom:10px;">Rocks are the 3–7 most important things each person or team must accomplish in the next 90 days. They're specific, measurable, and assigned to one person. At the end of the quarter: done or not done. No gray area.</p>
-              <div style="background:#f0fdf4; border-radius:8px; padding:12px; font-size:12px; color:#166534;"><strong>For Jimmy's onboarding:</strong> "Complete NCR CFC training to competency" or "Document 5 approved SOPs" would be example Rocks for Q3.</div>
+              <div style="background:#f0fdf4; border-radius:8px; padding:12px; font-size:12px; color:#166534;"><strong>For the incoming director:</strong> "Complete NCR CFC training to competency" or "Document 5 approved SOPs" would be example Rocks for Q3.</div>
             </div>
             <span class="eos-tool-arrow" style="font-size:16px; color:var(--muted); margin-left:12px; flex-shrink:0; transition:transform 0.2s; margin-top:2px;">▾</span>
           </div>
@@ -961,10 +960,10 @@
                 <div style="display:flex; gap:8px;"><span style="color:#4f7942; font-weight:700;">R</span> <span><strong>Realistic</strong> — you own it and have the ability to complete it</span></div>
                 <div style="display:flex; gap:8px;"><span style="color:#4f7942; font-weight:700;">T</span> <span><strong>Time-bound</strong> — due by end of quarter, not someday</span></div>
               </div>
-              <div style="font-weight:700; color:var(--navy); margin-bottom:8px;">Possible Q3 Rocks for Jimmy</div>
+              <div style="font-weight:700; color:var(--navy); margin-bottom:8px;">Example Q3 Rocks — Incoming Director</div>
               <div style="display:flex; flex-direction:column; gap:4px; font-size:12px; color:var(--muted);">
                 <div>→ Complete NCR CFC training to independent operation</div>
-                <div>→ Document and get Bill's approval on 5 SOPs</div>
+                <div>→ Document and get leadership approval on 5 SOPs</div>
                 <div>→ Complete R365 deep-dive training across all active modules</div>
                 <div>→ Present 90-day systems improvement roadmap to ownership</div>
               </div>
@@ -1000,7 +999,7 @@
                 <div>→ <strong>Meeting rating at the end is real.</strong> If it's below 8, you say why — and fix it next week.</div>
               </div>
               <div style="background:#fff7ed; border-radius:8px; padding:12px; font-size:12px; color:#92400e;">
-                <strong>Ask Bill:</strong> When is PHG's L10? Who's in the room? What's consistently on the Issues list? How long has the format been running?
+                <strong>Ask leadership:</strong> When is PHG's L10? Who's in the room? What's consistently on the Issues list? How long has the format been running?
               </div>
             </div>
           </div>
@@ -1012,7 +1011,7 @@
               <div class="card-title" style="margin-bottom:8px;">📈 Scorecard</div>
               <p style="font-size:13px; color:var(--muted); line-height:1.7; margin-bottom:10px;">5–15 weekly numbers that give a true pulse on the business. Every number has an owner and a weekly goal. Green = on track, Red = issue. The scorecard means leadership never gets surprised — problems surface fast.</p>
               <div style="background:#fffbeb; border-radius:8px; padding:12px; font-size:12px; color:#78350f;">
-                <strong>PHG scorecard likely includes:</strong> Weekly sales per location, labor %, cover counts, online review scores, open issues count, system uptime. <em>Ask Bill what's on theirs.</em>
+                <strong>PHG scorecard likely includes:</strong> Weekly sales per location, labor %, cover counts, online review scores, open issues count, system uptime. <em>Ask leadership what's on theirs.</em>
               </div>
             </div>
             <span class="eos-tool-arrow" style="font-size:16px; color:var(--muted); margin-left:12px; flex-shrink:0; transition:transform 0.2s; margin-top:2px;">▾</span>
@@ -1043,7 +1042,7 @@
               <div class="card-title" style="margin-bottom:8px;">🗂 V/TO — Vision/Traction Organizer</div>
               <p style="font-size:13px; color:var(--muted); line-height:1.7; margin-bottom:10px;">The one-page strategic plan for the entire company. Two sides: Vision (where we're going) and Traction (how we're getting there this year and this quarter). Every employee should see where the company is headed.</p>
               <div style="background:#f0fdf4; border-radius:8px; padding:12px; font-size:12px; color:#166534;">
-                <strong>Key ask for Bill:</strong> "Can you walk me through PHG's V/TO?" Understanding their 10-year target and 3-year picture will tell you everything about what they need from this role.
+                <strong>Key ask for leadership:</strong> "Can you walk me through PHG's V/TO?" Understanding their 10-year target and 3-year picture will tell you everything about what they need from this role.
               </div>
             </div>
             <span class="eos-tool-arrow" style="font-size:16px; color:var(--muted); margin-left:12px; flex-shrink:0; transition:transform 0.2s; margin-top:2px;">▾</span>
@@ -1071,7 +1070,7 @@
               <div class="card-title" style="margin-bottom:8px;">🔗 Integrator vs. Visionary</div>
               <p style="font-size:13px; color:var(--muted); line-height:1.7; margin-bottom:10px;">From <em>Rocket Fuel</em>. The Visionary is the founder/owner — big ideas, relationships, culture. The Integrator runs the day-to-day: manages the team, resolves issues, executes the plan. Most companies have a Visionary but need a strong Integrator.</p>
               <div style="background:#eff6ff; border-radius:8px; padding:12px; font-size:12px; color:#1e40af;">
-                <strong>For Jimmy:</strong> Bill has been the Integrator for tech. The Director of Business Systems role is essentially becoming the tech Integrator. Understanding this framing matters.
+                <strong>Note:</strong> The outgoing tech lead has been the Integrator for tech. The Director of Business Systems role is essentially stepping into that seat. Understanding this framing matters.
               </div>
             </div>
             <span class="eos-tool-arrow" style="font-size:16px; color:var(--muted); margin-left:12px; flex-shrink:0; transition:transform 0.2s; margin-top:2px;">▾</span>
@@ -1080,7 +1079,7 @@
             <div style="margin-top:14px; font-size:13px; line-height:1.8;">
               <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; font-size:12px; margin-bottom:14px;">
                 <div style="background:#fffbeb; padding:12px; border-radius:8px;">
-                  <div style="font-weight:700; color:#92400e; margin-bottom:6px;">🌟 Visionary (Bill / Ownership)</div>
+                  <div style="font-weight:700; color:#92400e; margin-bottom:6px;">🌟 Visionary (Ownership / Outgoing CTO)</div>
                   <div style="color:var(--muted); display:flex; flex-direction:column; gap:3px;">
                     <div>→ Big picture thinking</div>
                     <div>→ New ideas, new opportunities</div>
@@ -1090,7 +1089,7 @@
                   </div>
                 </div>
                 <div style="background:#eff6ff; padding:12px; border-radius:8px;">
-                  <div style="font-weight:700; color:#1e40af; margin-bottom:6px;">⚙ Integrator (Jimmy's role)</div>
+                  <div style="font-weight:700; color:#1e40af; margin-bottom:6px;">⚙ Integrator (Incoming Director)</div>
                   <div style="color:var(--muted); display:flex; flex-direction:column; gap:3px;">
                     <div>→ Executes the vision</div>
                     <div>→ Manages the team day-to-day</div>
@@ -1113,7 +1112,7 @@
               <div class="card-title" style="margin-bottom:8px;">🧩 Accountability Chart</div>
               <p style="font-size:13px; color:var(--muted); line-height:1.7; margin-bottom:10px;">Not a traditional org chart. It defines the major functions of the business (not titles), who owns each function, and what they're accountable for. Every seat has a clear owner with 3–5 key accountabilities.</p>
               <div style="background:#fffbeb; border-radius:8px; padding:12px; font-size:12px; color:#78350f;">
-                <strong>Ask Bill:</strong> Where does the Director of Business Systems sit on the Accountability Chart? What are the 3–5 accountabilities of the seat?
+                <strong>Ask leadership:</strong> Where does the Director of Business Systems sit on the Accountability Chart? What are the 3–5 accountabilities of the seat?
               </div>
             </div>
             <span class="eos-tool-arrow" style="font-size:16px; color:var(--muted); margin-left:12px; flex-shrink:0; transition:transform 0.2s; margin-top:2px;">▾</span>
@@ -1232,15 +1231,15 @@
     </div>
     <div class="form-group">
       <label class="form-label">Learning Resources / Links</label>
-      <textarea class="form-textarea" id="system-resources" placeholder="NCR docs, YouTube tutorials, Bill's contacts, etc..." style="min-height:60px;"></textarea>
+      <textarea class="form-textarea" id="system-resources" placeholder="NCR docs, YouTube tutorials, leadership contacts, etc..." style="min-height:60px;"></textarea>
     </div>
     <div class="form-group">
       <label class="form-label">My Notes</label>
       <textarea class="form-textarea" id="system-jimmy-notes" placeholder="What I know, what I need to learn, questions..." style="min-height:60px;"></textarea>
     </div>
     <div class="form-group">
-      <label class="form-label" style="color:var(--gold);">Bill's Notes</label>
-      <textarea class="form-textarea" id="system-bill-notes" placeholder="What Bill has shared about this system..." style="min-height:60px; border-color:#fde68a; background:#fffbeb;"></textarea>
+      <label class="form-label" style="color:var(--gold);">Leadership Notes</label>
+      <textarea class="form-textarea" id="system-bill-notes" placeholder="What leadership has shared about this system..." style="min-height:60px; border-color:#fde68a; background:#fffbeb;"></textarea>
     </div>
     <div class="form-actions">
       <button class="btn btn-outline" onclick="closeModal('system-modal')">Cancel</button>
@@ -1273,7 +1272,7 @@
     </div>
     <div class="form-group">
       <label class="form-label">Task Title</label>
-      <input type="text" class="form-input" id="task-title" placeholder="e.g. Shadow Bill on CFC menu build">
+      <input type="text" class="form-input" id="task-title" placeholder="e.g. Shadow leadership on CFC menu build">
     </div>
     <div class="form-group">
       <label class="form-label">Description</label>
@@ -1308,7 +1307,7 @@
       <label class="form-label">Status</label>
       <select class="form-select" id="sop-status">
         <option value="draft">Draft — Being Written</option>
-        <option value="review">Review — Needs Bill's Approval</option>
+        <option value="review">Review — Needs Leadership Approval</option>
         <option value="approved">Approved — Accurate & Complete</option>
       </select>
     </div>
@@ -1335,8 +1334,8 @@
       <div class="form-group">
         <label class="form-label">Author</label>
         <select class="form-select" id="log-author">
-          <option value="Jimmy">Jimmy</option>
-          <option value="Bill">Bill</option>
+          <option value="incoming">Incoming Director</option>
+          <option value="leadership">Leadership</option>
         </select>
       </div>
       <div class="form-group">
@@ -1375,8 +1374,8 @@
     <div id="eos-comp-body"></div>
     <div style="margin-top:20px; padding-top:16px; border-top:1px solid var(--border);">
       <div style="font-size:11px; font-weight:700; color:var(--gold); letter-spacing:0.5px; margin-bottom:10px;">📝 ADD A PHG NOTE</div>
-      <input type="text" id="eos-comp-note-title" class="form-input" placeholder="Note title (e.g. 'Bill on how PHG runs this')" style="margin-bottom:8px;">
-      <textarea id="eos-comp-note-content" class="form-textarea" placeholder="What did you learn? What did Bill say? Capture it here..." style="min-height:70px;"></textarea>
+      <input type="text" id="eos-comp-note-title" class="form-input" placeholder="Note title (e.g. 'Leadership on how PHG runs this')" style="margin-bottom:8px;">
+      <textarea id="eos-comp-note-content" class="form-textarea" placeholder="What did you learn? What did leadership share? Capture it here..." style="min-height:70px;"></textarea>
       <div style="display:flex; justify-content:flex-end; margin-top:8px;">
         <button class="btn btn-gold btn-sm" onclick="saveEosNote()">Save to Knowledge Log</button>
       </div>
@@ -1415,7 +1414,7 @@
         <option value="knowledge">Knowledge Log</option>
         <option value="vendors">Vendor Directory</option>
         <option value="contracts">Contracts &amp; Renewals</option>
-        <option value="questions">Questions for Bill</option>
+        <option value="questions">Leadership Q&A</option>
         <option value="training">Training Plan</option>
         <option value="locations">Location Directory</option>
         <option value="integrations">Integration Map</option>
@@ -1508,7 +1507,7 @@
 <div class="modal-overlay" id="question-modal">
   <div class="modal" style="max-width:500px;">
     <div class="modal-header">
-      <div class="modal-title">Add Question for Bill</div>
+      <div class="modal-title">Add Leadership Question</div>
       <button class="modal-close" onclick="closeModal('question-modal')">×</button>
     </div>
     <div class="form-group"><label class="form-label">Question</label><textarea class="form-textarea" id="q-text" placeholder="What do you need to ask?" style="min-height:80px;"></textarea></div>
@@ -1530,7 +1529,7 @@
     </div>
     <input type="hidden" id="answer-question-id">
     <div id="answer-question-preview" style="font-size:14px; font-weight:600; color:var(--navy); margin-bottom:16px; padding:12px; background:#f8faff; border-radius:8px;"></div>
-    <div class="form-group"><label class="form-label">Bill's Answer</label><textarea class="form-textarea" id="answer-text" placeholder="What did Bill say?" style="min-height:100px;"></textarea></div>
+    <div class="form-group"><label class="form-label">Leadership's Answer</label><textarea class="form-textarea" id="answer-text" placeholder="What did leadership say?" style="min-height:100px;"></textarea></div>
     <div class="form-actions">
       <button class="btn btn-outline" onclick="closeModal('answer-modal')">Cancel</button>
       <button class="btn btn-gold" onclick="saveAnswer()">Save Answer</button>
@@ -1567,7 +1566,7 @@
     </div>
     <div class="form-row">
       <div class="form-group"><label class="form-label">Method</label><input type="text" class="form-input" id="int-method" placeholder="e.g. API, Export/Import"></div>
-      <div class="form-group"><label class="form-label">Status</label><select class="form-select" id="int-status"><option value="confirmed">Confirmed</option><option value="unconfirmed">Unconfirmed — Verify with Bill</option><option value="manual">Manual Process</option></select></div>
+      <div class="form-group"><label class="form-label">Status</label><select class="form-select" id="int-status"><option value="confirmed">Confirmed</option><option value="unconfirmed">Unconfirmed — Verify with Leadership</option><option value="manual">Manual Process</option></select></div>
     </div>
     <div class="form-group"><label class="form-label">Notes</label><textarea class="form-textarea" id="int-notes"></textarea></div>
     <div class="form-actions">
@@ -1659,23 +1658,23 @@ const SEED_SYSTEMS = [
 
 const SEED_TASKS = [
   // Week 1
-  { week:1, title:'Introduction meeting with Bill — systems overview', description:'Formal walkthrough of all active systems, vendor contacts, and current pain points.', system_name:'All Systems', sort_order:1 },
+  { week:1, title:'Introduction meeting with leadership — systems overview', description:'Formal walkthrough of all active systems, vendor contacts, and current pain points.', system_name:'All Systems', sort_order:1 },
   { week:1, title:'Get access to all platforms with read-only credentials', description:'Logins to Aloha, R365, HotSchedules, M365 admin center, cameras, GoDaddy — observer access to start.', system_name:'All Systems', sort_order:2 },
-  { week:1, title:'Aloha POS core training — current version architecture', description:'Deep dive on current Aloha version with Bill. How is it different from what I knew? What\'s the daily management workflow?', system_name:'Aloha POS (NCR)', sort_order:3 },
-  { week:1, title:'NCR CFC orientation', description:'What is CFC, how PHG uses it, walk through a live menu build with Bill watching.', system_name:'NCR CFC', sort_order:4 },
+  { week:1, title:'Aloha POS core training — current version architecture', description:'Deep dive on current Aloha version with leadership. Understand the daily management workflow.', system_name:'Aloha POS (NCR)', sort_order:3 },
+  { week:1, title:'NCR CFC orientation', description:'What is CFC, how PHG uses it, walk through a live menu build with leadership observing.', system_name:'NCR CFC', sort_order:4 },
   // Week 2
-  { week:2, title:'NCR CFC — build a test menu from scratch', description:'Hands-on: build a menu item end-to-end in CFC without assistance. Bill reviews and corrects.', system_name:'NCR CFC', sort_order:1 },
+  { week:2, title:'NCR CFC — build a test menu from scratch', description:'Hands-on: build a menu item end-to-end in CFC without assistance. Leadership reviews and corrects.', system_name:'NCR CFC', sort_order:1 },
   { week:2, title:'NCR Web Menu Management deep dive', description:'Understand the web-based menu editor workflow. Where does it fit vs CFC? Who uses it day-to-day?', system_name:'NCR Menu Management (Web)', sort_order:2 },
   { week:2, title:'NCR Digital Ordering — setup and flow', description:'How does digital ordering integrate with POS? What\'s the order flow from guest to kitchen? How does PHG configure it?', system_name:'NCR Digital Ordering', sort_order:3 },
   { week:2, title:'Shadow a location GM on Aloha for a shift', description:'Spend a full service shift at a Ruth\'s Chris location observing Aloha in use. Document questions.', system_name:'Aloha POS (NCR)', sort_order:4 },
   // Week 3
   { week:3, title:'NCR Consumer Marketing — product orientation', description:'What is PHG using this for? Email, loyalty, guest data? Walk through active campaigns and how they\'re built.', system_name:'NCR Consumer Marketing', sort_order:1 },
-  { week:3, title:'NCR Consumer Marketing — build a test campaign', description:'Create a test campaign under Bill\'s supervision. Understand audience building and deployment.', system_name:'NCR Consumer Marketing', sort_order:2 },
-  { week:3, title:'Write SOP: Aloha end-of-day close process', description:'Document PHG\'s specific EOD close checklist from Aloha. Get Bill to review and approve.', system_name:'Aloha POS (NCR)', sort_order:3 },
+  { week:3, title:'NCR Consumer Marketing — build a test campaign', description:'Create a test campaign under leadership supervision. Understand audience building and deployment.', system_name:'NCR Consumer Marketing', sort_order:2 },
+  { week:3, title:'Write SOP: Aloha end-of-day close process', description:'Document PHG\'s specific EOD close checklist from Aloha. Get leadership to review and approve.', system_name:'Aloha POS (NCR)', sort_order:3 },
   { week:3, title:'Write SOP: NCR CFC menu build process', description:'Document the step-by-step for building/editing a menu in CFC. PHG-specific workflow.', system_name:'NCR CFC', sort_order:4 },
   // Week 4
-  { week:4, title:'R365 orientation — full system walkthrough with Bill', description:'Walk through every module PHG actively uses: GL, AP, inventory, recipe costing, reporting.', system_name:'Restaurant365 (R365)', sort_order:1 },
-  { week:4, title:'R365 recipe configuration deep dive', description:'Bill flagged this as a current pain point. Understand how PHG builds and maintains recipes. Where are the friction points?', system_name:'Restaurant365 (R365)', sort_order:2 },
+  { week:4, title:'R365 orientation — full system walkthrough with leadership', description:'Walk through every module PHG actively uses: GL, AP, inventory, recipe costing, reporting.', system_name:'Restaurant365 (R365)', sort_order:1 },
+  { week:4, title:'R365 recipe configuration deep dive', description:'Flagged as a current pain point. Understand how PHG builds and maintains recipes. Where are the friction points?', system_name:'Restaurant365 (R365)', sort_order:2 },
   { week:4, title:'R365 — run a period close walkthrough', description:'Shadow the accounting close process in R365. Understand timing, who does what, and what reports get pulled.', system_name:'Restaurant365 (R365)', sort_order:3 },
   { week:4, title:'Understand Aloha-to-R365 data flow', description:'How do sales data flow from Aloha into R365? What\'s automated vs. manual? Where do errors show up?', system_name:'Restaurant365 (R365)', sort_order:4 },
   // Week 5
@@ -1691,13 +1690,13 @@ const SEED_TASKS = [
   // Week 7
   { week:7, title:'OpenTable / Resy admin — configuration and reporting', description:'How is the reservation system configured? What reports does leadership pull? How does it tie to private dining?', system_name:'OpenTable / Resy / SevenRooms', sort_order:1 },
   { week:7, title:'GoDaddy — audit all PHG web properties', description:'Document all domains and sites in GoDaddy. What\'s the publishing process for updates? Who currently touches this?', system_name:'GoDaddy (Website Management)', sort_order:2 },
-  { week:7, title:'Write SOP: R365 recipe costing update process', description:'Document how PHG updates recipe costs when ingredient prices change. This was Bill\'s flagged pain point.', system_name:'Restaurant365 (R365)', sort_order:3 },
+  { week:7, title:'Write SOP: R365 recipe costing update process', description:'Document how PHG updates recipe costs when ingredient prices change. This is a flagged pain point.', system_name:'Restaurant365 (R365)', sort_order:3 },
   { week:7, title:'Identify any integration gaps or manual hand-offs between systems', description:'Map where data moves manually between systems. Flag for future automation opportunities.', system_name:'All Systems', sort_order:4 },
   // Week 8
-  { week:8, title:'Full systems competency self-assessment', description:'Update all system proficiency ratings. Where am I now vs. where I started? What still needs work?', system_name:'All Systems', sort_order:1 },
-  { week:8, title:'Finalize all drafted SOPs — get Bill\'s approval', description:'Review every SOP draft with Bill. Revise and mark approved. This is the knowledge base handoff.', system_name:'All Systems', sort_order:2 },
-  { week:8, title:'Present 90-day plan to ownership', description:'Based on what I\'ve learned, build and present a 90-day roadmap for systems improvements and any identified quick wins.', system_name:'All Systems', sort_order:3 },
-  { week:8, title:'Bill transition milestone: independent system operation', description:'At the end of Week 8, Jimmy should be operating all systems independently. Bill moves to consulting role.', system_name:'All Systems', sort_order:4 },
+  { week:8, title:'Full systems competency self-assessment', description:'Update all system proficiency ratings. Current level vs. starting point. What still needs work?', system_name:'All Systems', sort_order:1 },
+  { week:8, title:'Finalize all drafted SOPs — get leadership approval', description:'Review every SOP draft with leadership. Revise and mark approved. This is the knowledge base handoff.', system_name:'All Systems', sort_order:2 },
+  { week:8, title:'Present 90-day plan to ownership', description:'Build and present a 90-day roadmap for systems improvements and any identified quick wins.', system_name:'All Systems', sort_order:3 },
+  { week:8, title:'Transition milestone: independent system operation', description:'At the end of Week 8, the incoming director should be operating all systems independently. Outgoing lead moves to consulting role.', system_name:'All Systems', sort_order:4 },
 ];
 
 const SEED_VENDORS = [
@@ -1709,9 +1708,9 @@ const SEED_VENDORS = [
 ];
 
 const SEED_CONTRACTS = [
-  { vendor_name: 'NCR Voyix', system_name: 'Aloha POS / CFC / Digital Ordering', status: 'active', auto_renew: true, renewal_notice_days: 60, notes: 'Confirm exact dates and annual cost with Bill. Largest tech spend.' },
+  { vendor_name: 'NCR Voyix', system_name: 'Aloha POS / CFC / Digital Ordering', status: 'active', auto_renew: true, renewal_notice_days: 60, notes: 'Confirm exact dates and annual cost with leadership. Largest tech spend.' },
   { vendor_name: 'Restaurant365', system_name: 'Restaurant365 (R365)', status: 'active', auto_renew: true, renewal_notice_days: 30, notes: 'Confirm renewal date and per-location pricing.' },
-  { vendor_name: 'Fourth (HotSchedules)', system_name: 'HotSchedules / Fourth', status: 'active', auto_renew: true, renewal_notice_days: 30, notes: 'Confirm dates with Bill.' },
+  { vendor_name: 'Fourth (HotSchedules)', system_name: 'HotSchedules / Fourth', status: 'active', auto_renew: true, renewal_notice_days: 30, notes: 'Confirm dates with leadership.' },
   { vendor_name: 'Microsoft', system_name: 'Microsoft 365', status: 'active', auto_renew: true, renewal_notice_days: 30, notes: 'Business plan — confirm seat count and renewal date.' },
 ];
 
@@ -1729,7 +1728,7 @@ const SEED_QUESTIONS = [
 const SEED_INTEGRATIONS = [
   { from_system: 'Aloha POS', to_system: 'Restaurant365', data_type: 'Sales & transactions', frequency: 'Nightly', method: 'Automated', status: 'confirmed', notes: 'Daily sales flow from POS into R365 for P&L.' },
   { from_system: 'HotSchedules / Fourth', to_system: 'Restaurant365', data_type: 'Labor hours & cost', frequency: 'Weekly', method: 'Automated', status: 'confirmed', notes: 'Labor data feeds R365 for cost analysis.' },
-  { from_system: 'HotSchedules / Fourth', to_system: 'Payroll Systems', data_type: 'Hours worked', frequency: 'Weekly', method: 'Export/Import', status: 'unconfirmed', notes: 'Confirm exact method with Bill — may be manual.' },
+  { from_system: 'HotSchedules / Fourth', to_system: 'Payroll Systems', data_type: 'Hours worked', frequency: 'Weekly', method: 'Export/Import', status: 'unconfirmed', notes: 'Confirm exact method with leadership — may be manual.' },
   { from_system: 'NCR Consumer Marketing', to_system: 'Aloha POS', data_type: 'Loyalty & promos', frequency: 'Real-time', method: 'API', status: 'unconfirmed', notes: 'Confirm how loyalty redemptions flow to POS.' },
   { from_system: 'Restaurant365', to_system: 'Payroll Systems', data_type: 'Payroll data', frequency: 'Weekly', method: 'Unknown', status: 'unconfirmed', notes: 'Confirm payroll platform and integration method.' },
 ];
@@ -1917,7 +1916,7 @@ function renderSystems() {
 
   grid.innerHTML = filtered.map(s => {
     const pips = [0,1,2,3].map(i => `<div class="level-pip ${i < s.current_level ? `filled-${s.current_level}` : ''}"></div>`).join('');
-    const billNote = s.bill_notes ? `<div class="bill-note-box"><div class="bill-note-label">Bill's Note</div>${s.bill_notes}</div>` : '';
+    const billNote = s.bill_notes ? `<div class="bill-note-box"><div class="bill-note-label">Leadership Note</div>${s.bill_notes}</div>` : '';
     return `
       <div class="system-card" onclick="editSystem('${s.id}')">
         <div class="system-card-header">
@@ -2078,7 +2077,7 @@ function renderLog() {
     el.innerHTML = `
       <div class="empty-state">
         <div class="empty-state-icon">💬</div>
-        <div class="empty-state-text">No entries yet. Add things Bill tells you, things you discover, questions and answers.</div>
+        <div class="empty-state-text">No entries yet. Add things leadership shares, things you discover, questions and answers.</div>
       </div>`;
     return;
   }
@@ -2380,7 +2379,7 @@ function renderEosLog() {
   if (!el) return;
   const eosLogs = logs.filter(l => l.system_name && l.system_name.toLowerCase().includes('eos'));
   if (!eosLogs.length) {
-    el.innerHTML = `<div class="empty-state" style="padding:24px;"><div class="empty-state-icon">💡</div><div class="empty-state-text">No PHG-specific EOS notes yet. Add things Bill tells you about how they run it.</div></div>`;
+    el.innerHTML = `<div class="empty-state" style="padding:24px;"><div class="empty-state-icon">💡</div><div class="empty-state-text">No PHG-specific EOS notes yet. Add things leadership shares about how they run it.</div></div>`;
     return;
   }
   el.innerHTML = eosLogs.map(l => `
@@ -2424,7 +2423,7 @@ Every system you manage, SOP you write, and project you prioritize should trace 
 
 The Accountability Chart (not an org chart) defines every function in the company, who owns it, and what their 3–5 accountabilities are. One person per seat. If a seat has two owners, it has no owner.
 
-For your onboarding, the key question is: what does your seat on the Accountability Chart actually look like? What are you accountable for, and who do you report to?`,
+For the incoming director, the key question is: what does your seat on the Accountability Chart actually look like? What are you accountable for, and who do you report to?`,
     questions: [
       "Can I see PHG's Accountability Chart?",
       "What are the 3–5 defined accountabilities for the Director of Business Systems seat?",
@@ -2477,12 +2476,12 @@ The key discipline is that issues get resolved in the meeting, not tabled repeat
     tagline: 'The "way we do things" — documented, simplified, followed by all.',
     deeper: `The Process component is EOS's answer to institutional knowledge loss and inconsistency. Core processes get identified, documented at a high level (20% of the steps that deliver 80% of the results), and then everyone follows them.
 
-This is directly tied to your SOP work in this hub. Every SOP you document is a PHG core process being captured. The goal isn't writing manuals — it's making sure the business can run consistently whether it's Bill, Jimmy, or a future hire doing the work.
+This is directly tied to the SOP work in this hub. Every SOP documented is a PHG core process being captured. The goal isn't writing manuals — it's making sure the business can run consistently whether it's outgoing leadership, the incoming director, or a future hire doing the work.
 
 EOS calls this "followed by all" — once a process is approved, it's not optional. That's what makes the SOPs in this hub real assets, not just documentation.`,
     questions: [
       "Which of PHG's core processes are already documented?",
-      "Which processes does Bill feel are most at risk — undocumented or inconsistently followed?",
+      "Which processes does leadership feel are most at risk — undocumented or inconsistently followed?",
       "How does PHG decide which processes to formalize first?",
       "Once I document an SOP, what's the approval and adoption process?",
       "Are there processes that different locations are doing differently right now?",
@@ -2502,7 +2501,7 @@ For you: your Rocks for Q3 should be set early and tied to the systems transitio
       "How does the leadership team set Rocks — is it a formal offsite or internal meeting?",
       "Will I be expected to present Rocks to the leadership team?",
       "How have Rocks worked in practice — do they consistently get done?",
-      "What's the cadence for my onboarding to transition into L10 participation?",
+      "What's the cadence for the incoming director to transition into L10 participation?",
     ],
     note_tag: 'EOS (Entrepreneurial Operating System)',
   },
@@ -2522,7 +2521,7 @@ function openEosComponentModal(key) {
   body.innerHTML = `
     <div style="font-size:13px; color:var(--muted); line-height:1.9; margin-bottom:20px; white-space:pre-wrap;">${data.deeper}</div>
     <div style="background:#f8faff; border-radius:10px; padding:16px;">
-      <div style="font-size:11px; font-weight:700; color:var(--navy); margin-bottom:12px; text-transform:uppercase; letter-spacing:0.5px;">Ask Bill</div>
+      <div style="font-size:11px; font-weight:700; color:var(--navy); margin-bottom:12px; text-transform:uppercase; letter-spacing:0.5px;">Ask Leadership</div>
       ${data.questions.map(q => `
         <div style="display:flex; gap:10px; padding:7px 0; border-bottom:1px solid var(--border); font-size:13px;">
           <span style="color:var(--gold); font-weight:700; flex-shrink:0;">?</span>
@@ -2539,7 +2538,7 @@ async function saveEosNote() {
   const content = document.getElementById('eos-comp-note-content').value.trim();
   if (!title) return toast('Please enter a note title', 'error');
   const { data: inserted, error } = await db.from('phg_knowledge_log').insert({
-    author: 'Jimmy', system_name: tag, title, content,
+    author: 'incoming', system_name: tag, title, content,
   }).select().single();
   if (error) return toast('Error: ' + error.message, 'error');
   logs.unshift(inserted);
@@ -3174,7 +3173,7 @@ function renderQuestions() {
       : `<span class="q-priority-badge-normal">Normal</span>`;
     const statusBadge = `<span class="q-status-badge q-status-${q.status || 'pending'}">${(q.status || 'pending').charAt(0).toUpperCase() + (q.status || 'pending').slice(1)}</span>`;
     const answerBox = q.answer
-      ? `<div class="q-answer-box"><strong>Bill's Answer:</strong> ${q.answer}</div>`
+      ? `<div class="q-answer-box"><strong>Leadership's Answer:</strong> ${q.answer}</div>`
       : '';
     const dateAdded = q.created_at ? `<span style="font-size:11px; color:var(--muted);">Added ${formatDate(q.created_at)}</span>` : '';
     return `
@@ -3318,7 +3317,7 @@ function exportMD(section, ts) {
       content += `| ${c.vendor_name} | ${c.system_name || '—'} | ${c.contract_start || 'TBD'} | ${c.contract_end || 'TBD'} | ${c.annual_cost ? '$'+Number(c.annual_cost).toLocaleString() : 'TBD'} | ${c.auto_renew ? 'Yes' : 'No'} | ${c.renewal_notice_days || 30} days |\n`;
     });
   } else if (section === 'questions') {
-    content = '# Questions for Bill\n\n';
+    content = '# Leadership Q&A\n\n';
     questions.forEach(q => {
       content += `### [${(q.priority || 'normal').toUpperCase()}] ${q.question}\n`;
       if (q.context) content += `*Context: ${q.context}*\n\n`;
@@ -3375,7 +3374,7 @@ function exportXLSX(section, ts) {
     sheetName = 'Contracts';
   } else if (section === 'questions') {
     rows = questions.map(q => ({ Priority: q.priority, Question: q.question, Context: q.context, Status: q.status, Answer: q.answer }));
-    sheetName = 'Ask Bill';
+    sheetName = 'Leadership Q&A';
   } else if (section === 'training') {
     rows = tasks.map(t => ({ Week: t.week, Title: t.title, System: t.system_name, Status: t.status, Description: t.description }));
     sheetName = 'Training Plan';
@@ -3395,7 +3394,7 @@ function exportXLSX(section, ts) {
 function exportPDF(section, ts) {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
-  const titles = { sops: 'Standard Operating Procedures', knowledge: 'Knowledge Transfer Log', vendors: 'Vendor Directory', contracts: 'Contracts & Renewals', questions: 'Questions for Bill', training: '8-Week Training Plan', locations: 'Location Directory', integrations: 'Integration Map' };
+  const titles = { sops: 'Standard Operating Procedures', knowledge: 'Knowledge Transfer Log', vendors: 'Vendor Directory', contracts: 'Contracts & Renewals', questions: 'Leadership Q&A', training: '8-Week Training Plan', locations: 'Location Directory', integrations: 'Integration Map' };
   doc.setFontSize(18);
   doc.setTextColor(27, 58, 107);
   doc.text('PHG Transition Hub', 14, 18);
@@ -3440,7 +3439,7 @@ function exportPDF(section, ts) {
 }
 
 function exportDOCX(section, ts) {
-  const titles = { sops: 'Standard Operating Procedures', knowledge: 'Knowledge Transfer Log', vendors: 'Vendor Directory', contracts: 'Contracts & Renewals', questions: 'Questions for Bill', training: '8-Week Training Plan', locations: 'Location Directory', integrations: 'Integration Map' };
+  const titles = { sops: 'Standard Operating Procedures', knowledge: 'Knowledge Transfer Log', vendors: 'Vendor Directory', contracts: 'Contracts & Renewals', questions: 'Leadership Q&A', training: '8-Week Training Plan', locations: 'Location Directory', integrations: 'Integration Map' };
   let html = `<html><head><meta charset="utf-8"><style>
     body { font-family: Calibri, Arial, sans-serif; color: #1a1a2e; }
     h1 { color: #1B3A6B; border-bottom: 2px solid #C5A028; padding-bottom: 6px; }
