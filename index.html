@@ -38,6 +38,7 @@
     background: var(--bg);
     color: var(--text);
     min-height: 100vh;
+    overflow-x: hidden;
   }
 
   /* HEADER */
@@ -171,9 +172,93 @@
   .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
   .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
   @media (max-width: 768px) {
+    /* GRIDS */
     .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
-    nav { overflow-x: auto; }
+    .systems-grid { grid-template-columns: 1fr; }
+
+    /* NAV */
+    nav { overflow-x: auto; -webkit-overflow-scrolling: touch; }
     .nav-tab { padding: 12px 14px; font-size: 13px; }
+
+    /* MAIN — tighter padding */
+    main { padding: 14px 12px; }
+
+    /* HEADER — hide subtitle on small screens */
+    .header-sub { display: none; }
+    .header-title { font-size: 14px; }
+
+    /* BANNERS */
+    .overview-banner { padding: 18px 16px; margin-bottom: 16px; }
+    .overview-banner h2 { font-size: 17px; }
+    .overview-banner p { font-size: 13px; }
+    .askbill-banner { padding: 18px 16px; margin-bottom: 16px; }
+    .askbill-banner h2 { font-size: 17px; }
+
+    /* STAT CARDS */
+    .stat-value { font-size: 22px; }
+    .stat-card { padding: 14px 16px; }
+
+    /* CARDS */
+    .card { padding: 14px; }
+    .card-header { flex-wrap: wrap; gap: 8px; }
+
+    /* SECTION HEADERS */
+    .section-header { flex-wrap: wrap; gap: 8px; }
+
+    /* INTEGRATION MAP — stack vertically on mobile */
+    .integration-row {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 12px 14px;
+    }
+    .int-system-box { white-space: normal; width: 100%; box-sizing: border-box; }
+    .int-arrow { transform: rotate(90deg); align-self: center; font-size: 16px; }
+    .int-meta { width: 100%; }
+    .int-edit-btn { align-self: flex-end; }
+
+    /* FORMS */
+    .form-row { grid-template-columns: 1fr; }
+    .form-actions { flex-direction: column; }
+    .form-actions .btn { width: 100%; justify-content: center; }
+
+    /* LEVEL SELECTOR — wrap instead of overflow */
+    .level-selector { flex-wrap: wrap; }
+    .level-option { flex: unset; min-width: calc(33% - 6px); }
+
+    /* MODALS — bottom sheet on mobile */
+    .modal-overlay { align-items: flex-end; padding: 0; }
+    .modal {
+      border-radius: 16px 16px 0 0;
+      padding: 20px 16px;
+      max-height: 92vh;
+      width: 100%;
+      max-width: 100%;
+    }
+
+    /* WEEK ACCORDIONS */
+    .week-header { padding: 12px 14px; }
+    .week-title { font-size: 13px; }
+    .task-item { padding: 11px 14px; gap: 10px; }
+
+    /* KNOWLEDGE LOG */
+    .log-header { flex-wrap: wrap; }
+    .log-date { margin-left: 0; width: 100%; margin-top: 2px; }
+
+    /* TOAST — full width */
+    .toast { right: 12px; left: 12px; bottom: 12px; }
+
+    /* VENDOR / CONTRACT CARDS */
+    .vendor-card, .contract-card { padding: 14px; }
+
+    /* QUESTION CARDS */
+    .question-card { padding: 14px; }
+
+    /* FILTER BAR */
+    .filter-bar { gap: 6px; }
+
+    /* BUTTONS — full width in certain contexts */
+    .btn-sm { padding: 6px 10px; }
   }
 
   /* STAT CARDS */
