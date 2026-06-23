@@ -1,0 +1,1389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PHG Transition Hub</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  :root {
+    --navy: #1B3A6B;
+    --navy-dark: #122850;
+    --navy-light: #2a4f8f;
+    --gold: #C5A028;
+    --gold-light: #e8c23a;
+    --gold-pale: #fdf6e3;
+    --bg: #f4f6fa;
+    --card: #ffffff;
+    --text: #1a1a2e;
+    --muted: #6b7280;
+    --border: #e2e8f0;
+    --red: #dc2626;
+    --amber: #d97706;
+    --yellow: #ca8a04;
+    --green: #16a34a;
+    --blue: #2563eb;
+    --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-md: 0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.04);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--navy);
+    color: white;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+  .header-left { display: flex; align-items: center; gap: 16px; }
+  .logo-badge {
+    background: var(--gold);
+    color: var(--navy-dark);
+    font-weight: 800;
+    font-size: 13px;
+    padding: 5px 10px;
+    border-radius: 6px;
+    letter-spacing: 0.5px;
+  }
+  .header-title { font-size: 16px; font-weight: 600; opacity: 0.95; }
+  .header-sub { font-size: 12px; opacity: 0.55; margin-left: 8px; }
+  .sync-indicator {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 12px; opacity: 0.7;
+  }
+  .sync-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: #4ade80; animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+  /* NAV */
+  nav {
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    display: flex;
+    gap: 4px;
+    position: sticky;
+    top: 60px;
+    z-index: 99;
+  }
+  .nav-tab {
+    padding: 14px 18px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--muted);
+    border: none;
+    background: none;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .nav-tab:hover { color: var(--navy); }
+  .nav-tab.active {
+    color: var(--navy);
+    border-bottom-color: var(--gold);
+    font-weight: 600;
+  }
+
+  /* MAIN */
+  main { padding: 28px 24px; max-width: 1100px; margin: 0 auto; }
+
+  .view { display: none; }
+  .view.active { display: block; }
+
+  /* CARDS */
+  .card {
+    background: var(--card);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    padding: 20px;
+  }
+  .card-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 16px;
+  }
+  .card-title { font-size: 15px; font-weight: 600; color: var(--navy); }
+  .card-subtitle { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+  /* GRID */
+  .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  @media (max-width: 768px) {
+    .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+    nav { overflow-x: auto; }
+    .nav-tab { padding: 12px 14px; font-size: 13px; }
+  }
+
+  /* STAT CARDS */
+  .stat-card {
+    background: var(--card);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    padding: 18px 20px;
+  }
+  .stat-label { font-size: 12px; color: var(--muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
+  .stat-value { font-size: 28px; font-weight: 700; color: var(--navy); margin: 4px 0; }
+  .stat-sub { font-size: 12px; color: var(--muted); }
+  .stat-accent { color: var(--gold); }
+
+  /* PROFICIENCY LEVELS */
+  .level-bar {
+    display: flex; gap: 3px; margin-top: 6px;
+  }
+  .level-pip {
+    height: 6px; flex: 1; border-radius: 3px; background: var(--border);
+    transition: background 0.3s;
+  }
+  .level-pip.filled-0 { background: var(--red); }
+  .level-pip.filled-1 { background: var(--amber); }
+  .level-pip.filled-2 { background: var(--yellow); }
+  .level-pip.filled-3 { background: #65a30d; }
+  .level-pip.filled-4 { background: var(--green); }
+
+  .level-label {
+    font-size: 11px; font-weight: 600; padding: 2px 7px; border-radius: 10px; white-space: nowrap;
+  }
+  .level-label-0 { background: #fee2e2; color: var(--red); }
+  .level-label-1 { background: #fef3c7; color: #92400e; }
+  .level-label-2 { background: #fef9c3; color: #713f12; }
+  .level-label-3 { background: #dcfce7; color: #166534; }
+  .level-label-4 { background: #bbf7d0; color: #14532d; }
+
+  /* SYSTEM CARDS */
+  .systems-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 14px;
+  }
+  .system-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    cursor: pointer;
+    transition: all 0.15s;
+    box-shadow: var(--shadow);
+  }
+  .system-card:hover { border-color: var(--navy-light); box-shadow: var(--shadow-md); transform: translateY(-1px); }
+  .system-card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+  .system-name { font-weight: 600; font-size: 14px; color: var(--navy); }
+  .category-badge {
+    font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 10px;
+    background: #eff6ff; color: var(--blue); white-space: nowrap;
+  }
+  .system-desc { font-size: 12px; color: var(--muted); margin-bottom: 10px; line-height: 1.5; }
+  .system-notes { font-size: 11px; color: var(--muted); margin-top: 6px; font-style: italic; }
+
+  /* WEEK ACCORDIONS */
+  .week-block { margin-bottom: 12px; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); background: var(--card); }
+  .week-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 18px; cursor: pointer; user-select: none;
+    background: var(--card);
+    transition: background 0.1s;
+  }
+  .week-header:hover { background: #f8faff; }
+  .week-header-left { display: flex; align-items: center; gap: 12px; }
+  .week-num {
+    background: var(--navy); color: white;
+    font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 20px;
+    letter-spacing: 0.3px;
+  }
+  .week-title { font-weight: 600; font-size: 14px; color: var(--navy); }
+  .week-progress { font-size: 12px; color: var(--muted); }
+  .week-chevron { color: var(--muted); font-size: 14px; transition: transform 0.2s; }
+  .week-block.open .week-chevron { transform: rotate(180deg); }
+  .week-tasks { display: none; border-top: 1px solid var(--border); }
+  .week-block.open .week-tasks { display: block; }
+  .task-item {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 13px 18px; border-bottom: 1px solid var(--border);
+    transition: background 0.1s;
+  }
+  .task-item:last-child { border-bottom: none; }
+  .task-item:hover { background: #f8faff; }
+  .task-check {
+    width: 18px; height: 18px; border-radius: 4px; border: 2px solid var(--border);
+    cursor: pointer; flex-shrink: 0; margin-top: 1px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+    background: white;
+  }
+  .task-check.done { background: var(--green); border-color: var(--green); }
+  .task-check.in_progress { background: var(--amber); border-color: var(--amber); }
+  .task-check.done::after { content: '✓'; color: white; font-size: 11px; font-weight: 700; }
+  .task-check.in_progress::after { content: '●'; color: white; font-size: 8px; }
+  .task-content { flex: 1; }
+  .task-title { font-size: 13px; font-weight: 500; color: var(--text); }
+  .task-title.done-text { text-decoration: line-through; color: var(--muted); }
+  .task-desc { font-size: 12px; color: var(--muted); margin-top: 2px; line-height: 1.5; }
+  .task-system { font-size: 11px; color: var(--blue); margin-top: 3px; font-weight: 500; }
+  .task-actions { display: flex; gap: 6px; margin-top: 6px; }
+  .task-status-btn {
+    font-size: 10px; padding: 2px 8px; border-radius: 10px; border: 1px solid var(--border);
+    cursor: pointer; background: white; color: var(--muted); transition: all 0.1s;
+  }
+  .task-status-btn:hover { border-color: var(--navy); color: var(--navy); }
+  .task-status-btn.active-status { background: var(--navy); color: white; border-color: var(--navy); }
+  .task-notes-row { margin-top: 6px; display: flex; gap: 8px; }
+  .task-note-field {
+    flex: 1; font-size: 11px; padding: 4px 8px; border: 1px solid var(--border);
+    border-radius: 5px; color: var(--text); background: #fafafa;
+    resize: none; font-family: inherit;
+  }
+  .task-note-field:focus { outline: none; border-color: var(--navy-light); background: white; }
+
+  /* SOP cards */
+  .sop-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px;
+    cursor: pointer; transition: all 0.15s; box-shadow: var(--shadow);
+  }
+  .sop-card:hover { border-color: var(--navy-light); box-shadow: var(--shadow-md); }
+  .sop-status-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
+  .sop-status-dot.draft { background: var(--amber); }
+  .sop-status-dot.review { background: var(--blue); }
+  .sop-status-dot.approved { background: var(--green); }
+
+  /* KNOWLEDGE LOG */
+  .log-entry {
+    background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+    padding: 16px; box-shadow: var(--shadow);
+    display: flex; gap: 14px;
+  }
+  .log-avatar {
+    width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 13px; color: white;
+  }
+  .log-avatar.jimmy { background: var(--navy); }
+  .log-avatar.bill { background: var(--gold); color: var(--navy-dark); }
+  .log-body { flex: 1; }
+  .log-header { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+  .log-author { font-weight: 600; font-size: 13px; }
+  .log-system-tag {
+    font-size: 11px; padding: 1px 7px; background: #eff6ff; color: var(--blue);
+    border-radius: 10px; font-weight: 500;
+  }
+  .log-date { font-size: 11px; color: var(--muted); margin-left: auto; }
+  .log-title { font-weight: 500; font-size: 14px; margin-bottom: 4px; }
+  .log-content { font-size: 13px; color: var(--muted); line-height: 1.6; white-space: pre-wrap; }
+
+  /* BUTTONS */
+  .btn {
+    padding: 8px 16px; border-radius: 7px; font-size: 13px; font-weight: 600;
+    cursor: pointer; border: none; transition: all 0.15s; display: inline-flex; align-items: center; gap: 6px;
+  }
+  .btn-primary { background: var(--navy); color: white; }
+  .btn-primary:hover { background: var(--navy-light); }
+  .btn-gold { background: var(--gold); color: var(--navy-dark); }
+  .btn-gold:hover { background: var(--gold-light); }
+  .btn-outline { background: white; color: var(--navy); border: 1px solid var(--border); }
+  .btn-outline:hover { border-color: var(--navy); }
+  .btn-sm { padding: 5px 12px; font-size: 12px; }
+  .btn-danger { background: #fee2e2; color: var(--red); border: 1px solid #fecaca; }
+  .btn-danger:hover { background: #fecaca; }
+
+  /* MODAL */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 200;
+    display: none; align-items: center; justify-content: center; padding: 20px;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: white; border-radius: 14px; padding: 24px; width: 100%; max-width: 560px;
+    max-height: 85vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+  }
+  .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+  .modal-title { font-size: 18px; font-weight: 700; color: var(--navy); }
+  .modal-close { background: none; border: none; font-size: 22px; cursor: pointer; color: var(--muted); line-height: 1; }
+  .modal-close:hover { color: var(--text); }
+
+  /* FORM */
+  .form-group { margin-bottom: 16px; }
+  .form-label { display: block; font-size: 13px; font-weight: 600; color: var(--navy); margin-bottom: 5px; }
+  .form-input, .form-select, .form-textarea {
+    width: 100%; padding: 9px 12px; border: 1px solid var(--border); border-radius: 7px;
+    font-size: 13px; font-family: inherit; color: var(--text); background: white; transition: border-color 0.15s;
+  }
+  .form-input:focus, .form-select:focus, .form-textarea:focus {
+    outline: none; border-color: var(--navy-light); box-shadow: 0 0 0 3px rgba(27,58,107,0.08);
+  }
+  .form-textarea { resize: vertical; min-height: 80px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .form-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+
+  /* PROFICIENCY SELECTOR */
+  .level-selector { display: flex; gap: 8px; margin-top: 4px; }
+  .level-option {
+    flex: 1; padding: 8px; border: 2px solid var(--border); border-radius: 7px;
+    text-align: center; cursor: pointer; transition: all 0.15s; font-size: 11px; font-weight: 600;
+  }
+  .level-option:hover { border-color: var(--navy-light); }
+  .level-option.selected-level-0 { border-color: var(--red); background: #fee2e2; color: var(--red); }
+  .level-option.selected-level-1 { border-color: var(--amber); background: #fef3c7; color: #92400e; }
+  .level-option.selected-level-2 { border-color: var(--yellow); background: #fef9c3; color: #713f12; }
+  .level-option.selected-level-3 { border-color: #65a30d; background: #dcfce7; color: #166534; }
+  .level-option.selected-level-4 { border-color: var(--green); background: #bbf7d0; color: #14532d; }
+
+  /* CATEGORY FILTER */
+  .filter-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+  .filter-chip {
+    padding: 5px 14px; border-radius: 20px; font-size: 12px; font-weight: 600;
+    cursor: pointer; border: 1px solid var(--border); background: white; color: var(--muted);
+    transition: all 0.15s;
+  }
+  .filter-chip:hover, .filter-chip.active { background: var(--navy); color: white; border-color: var(--navy); }
+
+  /* OVERVIEW */
+  .overview-banner {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+    color: white; border-radius: 12px; padding: 24px 28px; margin-bottom: 24px;
+    position: relative; overflow: hidden;
+  }
+  .overview-banner::after {
+    content: 'PHG'; position: absolute; right: -10px; top: -20px;
+    font-size: 120px; font-weight: 900; color: rgba(255,255,255,0.04); pointer-events: none;
+    line-height: 1;
+  }
+  .overview-banner h2 { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+  .overview-banner p { font-size: 14px; opacity: 0.8; line-height: 1.6; max-width: 600px; }
+  .banner-gold { color: var(--gold-light); font-weight: 700; }
+
+  /* PROGRESS RING */
+  .progress-ring-container { text-align: center; }
+  .progress-ring-label { font-size: 11px; color: var(--muted); margin-top: 6px; font-weight: 500; }
+
+  /* SECTION HEADER */
+  .section-header {
+    display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;
+  }
+  .section-title { font-size: 16px; font-weight: 700; color: var(--navy); }
+
+  /* TOAST */
+  .toast {
+    position: fixed; bottom: 24px; right: 24px; z-index: 300;
+    background: var(--navy); color: white; padding: 12px 18px; border-radius: 9px;
+    font-size: 13px; font-weight: 500; box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    transform: translateY(80px); opacity: 0; transition: all 0.3s;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+  .toast.success::before { content: '✓'; font-weight: 700; color: #4ade80; }
+  .toast.error::before { content: '✗'; font-weight: 700; color: #f87171; }
+
+  /* EMPTY STATE */
+  .empty-state { text-align: center; padding: 48px 24px; color: var(--muted); }
+  .empty-state-icon { font-size: 40px; margin-bottom: 12px; opacity: 0.5; }
+  .empty-state-text { font-size: 14px; }
+
+  /* LOADING */
+  .loading { text-align: center; padding: 48px; color: var(--muted); font-size: 14px; }
+  .spinner {
+    width: 28px; height: 28px; border: 3px solid var(--border);
+    border-top-color: var(--navy); border-radius: 50%;
+    animation: spin 0.7s linear infinite; margin: 0 auto 12px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* BILL NOTES HIGHLIGHT */
+  .bill-note-box {
+    background: #fdf6e3; border-left: 3px solid var(--gold);
+    padding: 8px 12px; border-radius: 0 6px 6px 0; font-size: 12px;
+    color: #78350f; margin-top: 6px; line-height: 1.5;
+  }
+  .bill-note-label { font-weight: 700; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--gold); }
+
+  /* DIVIDER */
+  .divider { height: 1px; background: var(--border); margin: 20px 0; }
+
+  /* STACKED ROWS */
+  .stack { display: flex; flex-direction: column; gap: 10px; }
+
+  /* SOP EDITOR */
+  .sop-content-area {
+    width: 100%; min-height: 200px; padding: 12px; border: 1px solid var(--border);
+    border-radius: 7px; font-size: 13px; font-family: 'Monaco', 'Courier New', monospace;
+    resize: vertical; line-height: 1.7; color: var(--text);
+  }
+  .sop-content-area:focus { outline: none; border-color: var(--navy-light); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <div class="logo-badge">PHG</div>
+    <div>
+      <div class="header-title">Transition Hub <span class="header-sub">Director of Business Systems</span></div>
+    </div>
+  </div>
+  <div class="sync-indicator">
+    <div class="sync-dot"></div>
+    <span id="sync-status">Live</span>
+  </div>
+</header>
+
+<nav>
+  <button class="nav-tab active" data-view="overview">Overview</button>
+  <button class="nav-tab" data-view="systems">System Map</button>
+  <button class="nav-tab" data-view="training">Training Plan</button>
+  <button class="nav-tab" data-view="sops">SOPs</button>
+  <button class="nav-tab" data-view="knowledge">Knowledge Log</button>
+</nav>
+
+<main>
+
+  <!-- OVERVIEW -->
+  <div id="view-overview" class="view active">
+    <div class="overview-banner">
+      <h2>PHG Systems Transition — Jimmy Cannon</h2>
+      <p>
+        This hub tracks my onboarding into PHG's technology stack. I've mapped every system, rated my honest starting proficiency,
+        and built an <span class="banner-gold">8-week training plan</span> so we can run this like a real project —
+        with documented SOPs and a knowledge log that outlasts both of us.
+      </p>
+    </div>
+
+    <div class="grid-4" style="margin-bottom: 24px;" id="overview-stats">
+      <div class="stat-card">
+        <div class="stat-label">Systems Mapped</div>
+        <div class="stat-value stat-accent" id="stat-systems">—</div>
+        <div class="stat-sub">across all categories</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Avg. Starting Level</div>
+        <div class="stat-value" id="stat-avg-level">—</div>
+        <div class="stat-sub">out of 4 (Expert)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Training Tasks</div>
+        <div class="stat-value" id="stat-tasks-done">—</div>
+        <div class="stat-sub" id="stat-tasks-sub">of — completed</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">SOPs Documented</div>
+        <div class="stat-value stat-accent" id="stat-sops">—</div>
+        <div class="stat-sub">knowledge captured</div>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-bottom: 24px;">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Systems by Category</div>
+            <div class="card-subtitle">Proficiency gap overview</div>
+          </div>
+        </div>
+        <div id="category-breakdown" class="stack"></div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Bill's Priority Areas</div>
+            <div class="card-subtitle">From our conversation — where to focus first</div>
+          </div>
+        </div>
+        <div class="stack">
+          <div style="padding:10px; background:#fff7ed; border-radius:8px; border-left:3px solid var(--amber);">
+            <div style="font-size:12px; font-weight:700; color:#92400e; margin-bottom:4px;">⚠ Flagged by Bill</div>
+            <div style="font-size:13px; font-weight:600; margin-bottom:2px;">NCR CFC & Current Aloha Stack</div>
+            <div style="font-size:12px; color:var(--muted);">CFC, web-based menu mgmt, digital ordering, consumer marketing — all newer than my Aloha experience</div>
+          </div>
+          <div style="padding:10px; background:#fff7ed; border-radius:8px; border-left:3px solid var(--amber);">
+            <div style="font-size:12px; font-weight:700; color:#92400e; margin-bottom:4px;">⚠ Flagged by Bill</div>
+            <div style="font-size:13px; font-weight:600; margin-bottom:2px;">Restaurant365 Operational Processes</div>
+            <div style="font-size:12px; color:var(--muted);">Recipe configuration, menu management workflows, and current R365 ops — needs current-version depth</div>
+          </div>
+          <div style="padding:10px; background:#f0fdf4; border-radius:8px; border-left:3px solid var(--green);">
+            <div style="font-size:12px; font-weight:700; color:#166534; margin-bottom:4px;">✓ Strengths to leverage</div>
+            <div style="font-size:13px; font-weight:600; margin-bottom:2px;">POS Integration, Operations, Microsoft 365</div>
+            <div style="font-size:12px; color:var(--muted);">me&u POS integration experience, 10+ years running restaurants, full M365 proficiency</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Why This Hub Exists</div>
+      </div>
+      <p style="font-size:13px; color:var(--muted); line-height:1.8; max-width:700px;">
+        Bill's biggest concern about any successor is the transition risk — someone getting up to speed on 30+ integrated systems
+        while operations keep running. This hub is my answer to that concern. It turns the onboarding into a managed project:
+        transparent gaps, a clear learning sequence, and documentation built along the way. When I'm done, PHG will have a
+        knowledge base it's never had — useful for training my own eventual successor.
+      </p>
+    </div>
+  </div>
+
+  <!-- SYSTEMS -->
+  <div id="view-systems" class="view">
+    <div class="section-header">
+      <div class="section-title">System Proficiency Map</div>
+      <button class="btn btn-primary btn-sm" onclick="openSystemModal()">+ Add System</button>
+    </div>
+    <div class="filter-bar" id="category-filters"></div>
+    <div class="systems-grid" id="systems-grid">
+      <div class="loading"><div class="spinner"></div>Loading systems...</div>
+    </div>
+  </div>
+
+  <!-- TRAINING PLAN -->
+  <div id="view-training" class="view">
+    <div class="section-header">
+      <div class="section-title">8-Week Training Plan</div>
+      <button class="btn btn-primary btn-sm" onclick="openTaskModal()">+ Add Task</button>
+    </div>
+    <div id="training-weeks">
+      <div class="loading"><div class="spinner"></div>Loading plan...</div>
+    </div>
+  </div>
+
+  <!-- SOPs -->
+  <div id="view-sops" class="view">
+    <div class="section-header">
+      <div class="section-title">Standard Operating Procedures</div>
+      <button class="btn btn-primary btn-sm" onclick="openSopModal()">+ New SOP</button>
+    </div>
+    <p style="font-size:13px; color:var(--muted); margin-bottom:20px; line-height:1.6;">
+      SOPs get built here as we learn each system — capturing how PHG specifically uses each platform.
+      These become the operational knowledge base for training any future hire.
+    </p>
+    <div id="sops-grid" class="systems-grid">
+      <div class="loading"><div class="spinner"></div>Loading SOPs...</div>
+    </div>
+  </div>
+
+  <!-- KNOWLEDGE LOG -->
+  <div id="view-knowledge" class="view">
+    <div class="section-header">
+      <div class="section-title">Knowledge Transfer Log</div>
+      <button class="btn btn-primary btn-sm" onclick="openLogModal()">+ Add Entry</button>
+    </div>
+    <p style="font-size:13px; color:var(--muted); margin-bottom:20px; line-height:1.6;">
+      A running log of institutional knowledge — things Bill shares, things I discover, questions and answers.
+      Nothing gets lost in email or Slack.
+    </p>
+    <div id="knowledge-log" class="stack">
+      <div class="loading"><div class="spinner"></div>Loading log...</div>
+    </div>
+  </div>
+
+</main>
+
+<!-- MODALS -->
+
+<!-- System Modal -->
+<div class="modal-overlay" id="system-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="system-modal-title">Add System</div>
+      <button class="modal-close" onclick="closeModal('system-modal')">×</button>
+    </div>
+    <input type="hidden" id="system-id">
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">System Name</label>
+        <input type="text" class="form-input" id="system-name" placeholder="e.g. Aloha POS">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Category</label>
+        <select class="form-select" id="system-category">
+          <option>POS</option>
+          <option>Finance</option>
+          <option>Scheduling</option>
+          <option>Marketing</option>
+          <option>Reservations</option>
+          <option>Infrastructure</option>
+          <option>Security</option>
+          <option>Payments</option>
+          <option>Productivity</option>
+          <option>HR / Payroll</option>
+          <option>AV</option>
+          <option>Other</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Description / What it does at PHG</label>
+      <textarea class="form-textarea" id="system-description" placeholder="Brief description of how PHG uses this system..."></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">My Current Proficiency</label>
+      <div class="level-selector" id="level-selector">
+        <div class="level-option" data-level="0" onclick="selectLevel(0)">0<br><span style="font-size:9px;">None</span></div>
+        <div class="level-option" data-level="1" onclick="selectLevel(1)">1<br><span style="font-size:9px;">Familiar</span></div>
+        <div class="level-option" data-level="2" onclick="selectLevel(2)">2<br><span style="font-size:9px;">Intermediate</span></div>
+        <div class="level-option" data-level="3" onclick="selectLevel(3)">3<br><span style="font-size:9px;">Proficient</span></div>
+        <div class="level-option" data-level="4" onclick="selectLevel(4)">4<br><span style="font-size:9px;">Expert</span></div>
+      </div>
+      <input type="hidden" id="system-level" value="0">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Learning Resources / Links</label>
+      <textarea class="form-textarea" id="system-resources" placeholder="NCR docs, YouTube tutorials, Bill's contacts, etc..." style="min-height:60px;"></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">My Notes</label>
+      <textarea class="form-textarea" id="system-jimmy-notes" placeholder="What I know, what I need to learn, questions..." style="min-height:60px;"></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label" style="color:var(--gold);">Bill's Notes</label>
+      <textarea class="form-textarea" id="system-bill-notes" placeholder="What Bill has shared about this system..." style="min-height:60px; border-color:#fde68a; background:#fffbeb;"></textarea>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-outline" onclick="closeModal('system-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveSystem()">Save System</button>
+    </div>
+  </div>
+</div>
+
+<!-- Task Modal -->
+<div class="modal-overlay" id="task-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Add Training Task</div>
+      <button class="modal-close" onclick="closeModal('task-modal')">×</button>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Week</label>
+        <select class="form-select" id="task-week">
+          <option value="1">Week 1</option><option value="2">Week 2</option>
+          <option value="3">Week 3</option><option value="4">Week 4</option>
+          <option value="5">Week 5</option><option value="6">Week 6</option>
+          <option value="7">Week 7</option><option value="8">Week 8</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">System</label>
+        <input type="text" class="form-input" id="task-system" placeholder="e.g. Aloha POS">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Task Title</label>
+      <input type="text" class="form-input" id="task-title" placeholder="e.g. Shadow Bill on CFC menu build">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Description</label>
+      <textarea class="form-textarea" id="task-description" placeholder="What specifically needs to happen..."></textarea>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-outline" onclick="closeModal('task-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveTask()">Add Task</button>
+    </div>
+  </div>
+</div>
+
+<!-- SOP Modal -->
+<div class="modal-overlay" id="sop-modal">
+  <div class="modal" style="max-width:680px;">
+    <div class="modal-header">
+      <div class="modal-title" id="sop-modal-title">New SOP</div>
+      <button class="modal-close" onclick="closeModal('sop-modal')">×</button>
+    </div>
+    <input type="hidden" id="sop-id">
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Title</label>
+        <input type="text" class="form-input" id="sop-title" placeholder="e.g. Aloha CFC Menu Build Process">
+      </div>
+      <div class="form-group">
+        <label class="form-label">System</label>
+        <input type="text" class="form-input" id="sop-system" placeholder="e.g. Aloha POS">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Status</label>
+      <select class="form-select" id="sop-status">
+        <option value="draft">Draft — Being Written</option>
+        <option value="review">Review — Needs Bill's Approval</option>
+        <option value="approved">Approved — Accurate & Complete</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Content</label>
+      <textarea class="sop-content-area" id="sop-content" placeholder="Write the SOP here. Use plain text or markdown-style formatting with headers (#), steps (1. 2. 3.), and notes (NOTE: ...)"></textarea>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-danger btn-sm" id="sop-delete-btn" onclick="deleteSop()" style="display:none; margin-right:auto;">Delete</button>
+      <button class="btn btn-outline" onclick="closeModal('sop-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveSop()">Save SOP</button>
+    </div>
+  </div>
+</div>
+
+<!-- Log Modal -->
+<div class="modal-overlay" id="log-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Add Knowledge Entry</div>
+      <button class="modal-close" onclick="closeModal('log-modal')">×</button>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Author</label>
+        <select class="form-select" id="log-author">
+          <option value="Jimmy">Jimmy</option>
+          <option value="Bill">Bill</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Related System (optional)</label>
+        <input type="text" class="form-input" id="log-system" placeholder="e.g. Restaurant365">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Title</label>
+      <input type="text" class="form-input" id="log-title" placeholder="e.g. How end-of-day close works in Aloha">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Notes / Details</label>
+      <textarea class="form-textarea" id="log-content" placeholder="Capture the knowledge here..." style="min-height:120px;"></textarea>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-outline" onclick="closeModal('log-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveLog()">Add to Log</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ============================================================
+// CONFIG
+// ============================================================
+const SUPABASE_URL = 'https://azkyohtmhlvnkziuvgvk.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF6a3lvaHRtaGx2bmt6aXV2Z3ZrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyNTQxMTQsImV4cCI6MjA5MjgzMDExNH0.BTN2ByDMpgmv5cn1e4--cfYLFUCS23ZnOYaz4gf8qLM';
+
+const { createClient } = supabase;
+const db = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// ============================================================
+// SEED DATA
+// ============================================================
+const SEED_SYSTEMS = [
+  { name: 'Aloha POS (NCR)', category: 'POS', current_level: 1, sort_order: 1,
+    description: 'Primary point-of-sale system across all PHG restaurant locations. Core transaction processing, table management, and order routing.',
+    jimmy_notes: 'Administered Aloha in mid-2000s through ~2015. Deep understanding of core architecture, but current version has major new products layered on top that I haven\'t worked with.',
+    resources: 'NCR Voyix documentation portal, Aloha Manager online help' },
+  { name: 'NCR CFC', category: 'POS', current_level: 0, sort_order: 2,
+    description: 'Central File Consolidation — NCR\'s centralized configuration system for managing menu data, pricing, and settings across all locations from one place.',
+    jimmy_notes: 'This didn\'t exist when I was running Aloha. Bill specifically flagged this as a gap. Priority #1 to learn.',
+    resources: 'NCR Voyix CFC docs, YouTube: NCR Aloha CFC tutorial' },
+  { name: 'NCR Menu Management (Web)', category: 'POS', current_level: 0, sort_order: 3,
+    description: 'Web-based menu configuration tool for building and editing menus across locations. Replaced the old in-system menu editor.',
+    jimmy_notes: 'Flagged by Bill as a current workflow. Zero experience — need hands-on training with Bill.',
+    resources: '' },
+  { name: 'NCR Digital Ordering', category: 'POS', current_level: 0, sort_order: 4,
+    description: 'NCR\'s digital/online ordering integration with the Aloha POS stack.',
+    jimmy_notes: 'Part of the current integrated stack Bill showed me. Zero experience with this specific product.',
+    resources: 'NCR Voyix digital ordering documentation' },
+  { name: 'NCR Consumer Marketing', category: 'Marketing', current_level: 0, sort_order: 5,
+    description: 'NCR\'s consumer marketing platform — likely handles loyalty, email, and guest data tied into the POS.',
+    jimmy_notes: 'Bill mentioned this as a key piece I haven\'t worked with. Need to understand how PHG uses it specifically.',
+    resources: '' },
+  { name: 'Restaurant365 (R365)', category: 'Finance', current_level: 1, sort_order: 6,
+    description: 'Restaurant-specific accounting, operations, and inventory management platform. PHG uses it for P&L, recipe costing, vendor management, and reporting.',
+    jimmy_notes: 'Familiar with restaurant accounting systems and concepts. Bill flagged recipe configuration and operational processes as areas needing depth. Priority alongside NCR.',
+    resources: 'Restaurant365 University (help.restaurant365.com), R365 YouTube channel' },
+  { name: 'Microsoft 365', category: 'Productivity', current_level: 3, sort_order: 7,
+    description: 'Full M365 suite — Teams, Outlook, SharePoint, OneDrive, Excel, Word. Used org-wide for communication, document management, and collaboration.',
+    jimmy_notes: 'Strong proficiency. Use daily. Comfortable with admin-level setup, Teams configuration, SharePoint. This is a genuine strength.',
+    resources: '' },
+  { name: 'HotSchedules / Fourth', category: 'Scheduling', current_level: 1, sort_order: 8,
+    description: 'Employee scheduling and labor management platform used across PHG restaurant locations.',
+    jimmy_notes: 'Used HotSchedules as an operator. Need to understand current admin side and how PHG configures it across 12+ Ruth\'s Chris locations.',
+    resources: 'Fourth (HotSchedules) Help Center' },
+  { name: 'Camera / Surveillance Systems', category: 'Security', current_level: 1, sort_order: 9,
+    description: 'Camera and surveillance system covering restaurant and office locations. Multiple vendors likely.',
+    jimmy_notes: 'Basic admin experience as a restaurant operator. Need to understand PHG\'s specific setup and any centralized monitoring.',
+    resources: '' },
+  { name: 'GoDaddy (Website Management)', category: 'Marketing', current_level: 2, sort_order: 10,
+    description: 'Website hosting and domain management for PHG restaurant websites.',
+    jimmy_notes: 'Comfortable with GoDaddy. As a developer I can go well beyond basic site management — this is a strong area.',
+    resources: '' },
+  { name: 'OpenTable / Resy / SevenRooms', category: 'Reservations', current_level: 2, sort_order: 11,
+    description: 'Reservation management platform for Ruth\'s Chris and other concepts. Guest database, floor management, wait lists.',
+    jimmy_notes: 'Used from the operator side extensively. Need to understand the admin/management side and how PHG specifically has it configured.',
+    resources: '' },
+  { name: 'Payment Processing', category: 'Payments', current_level: 2, sort_order: 12,
+    description: 'Payment processing systems integrated with Aloha POS. NCR and/or third-party payment gateway.',
+    jimmy_notes: 'General operator familiarity. Need to understand PHG\'s specific processor relationships and any chargebacks/reconciliation workflows.',
+    resources: '' },
+  { name: 'Network Infrastructure', category: 'Infrastructure', current_level: 1, sort_order: 13,
+    description: 'Network setup across all PHG locations — POS network segmentation, VLANs, internet failover, firewall management.',
+    jimmy_notes: 'Basic troubleshooting experience. This is likely vendor-managed but need to understand the topology and who the vendors are.',
+    resources: '' },
+  { name: 'AV Systems', category: 'AV', current_level: 0, sort_order: 14,
+    description: 'Audio/visual systems in restaurant dining rooms and event spaces. Music, screens, private dining AV.',
+    jimmy_notes: 'No formal AV administration experience. Need to understand what PHG has deployed and who supports it.',
+    resources: '' },
+  { name: 'Payroll Systems', category: 'HR / Payroll', current_level: 1, sort_order: 15,
+    description: 'Payroll processing, likely integrated with R365 and HotSchedules. Need to identify the specific payroll provider.',
+    jimmy_notes: 'Ran payroll as a restaurant operator. Need to understand the specific platform and PHG workflows.',
+    resources: '' },
+];
+
+const SEED_TASKS = [
+  // Week 1
+  { week:1, title:'Introduction meeting with Bill — systems overview', description:'Formal walkthrough of all active systems, vendor contacts, and current pain points.', system_name:'All Systems', sort_order:1 },
+  { week:1, title:'Get access to all platforms with read-only credentials', description:'Logins to Aloha, R365, HotSchedules, M365 admin center, cameras, GoDaddy — observer access to start.', system_name:'All Systems', sort_order:2 },
+  { week:1, title:'Aloha POS core training — current version architecture', description:'Deep dive on current Aloha version with Bill. How is it different from what I knew? What\'s the daily management workflow?', system_name:'Aloha POS (NCR)', sort_order:3 },
+  { week:1, title:'NCR CFC orientation', description:'What is CFC, how PHG uses it, walk through a live menu build with Bill watching.', system_name:'NCR CFC', sort_order:4 },
+  // Week 2
+  { week:2, title:'NCR CFC — build a test menu from scratch', description:'Hands-on: build a menu item end-to-end in CFC without assistance. Bill reviews and corrects.', system_name:'NCR CFC', sort_order:1 },
+  { week:2, title:'NCR Web Menu Management deep dive', description:'Understand the web-based menu editor workflow. Where does it fit vs CFC? Who uses it day-to-day?', system_name:'NCR Menu Management (Web)', sort_order:2 },
+  { week:2, title:'NCR Digital Ordering — setup and flow', description:'How does digital ordering integrate with POS? What\'s the order flow from guest to kitchen? How does PHG configure it?', system_name:'NCR Digital Ordering', sort_order:3 },
+  { week:2, title:'Shadow a location GM on Aloha for a shift', description:'Spend a full service shift at a Ruth\'s Chris location observing Aloha in use. Document questions.', system_name:'Aloha POS (NCR)', sort_order:4 },
+  // Week 3
+  { week:3, title:'NCR Consumer Marketing — product orientation', description:'What is PHG using this for? Email, loyalty, guest data? Walk through active campaigns and how they\'re built.', system_name:'NCR Consumer Marketing', sort_order:1 },
+  { week:3, title:'NCR Consumer Marketing — build a test campaign', description:'Create a test campaign under Bill\'s supervision. Understand audience building and deployment.', system_name:'NCR Consumer Marketing', sort_order:2 },
+  { week:3, title:'Write SOP: Aloha end-of-day close process', description:'Document PHG\'s specific EOD close checklist from Aloha. Get Bill to review and approve.', system_name:'Aloha POS (NCR)', sort_order:3 },
+  { week:3, title:'Write SOP: NCR CFC menu build process', description:'Document the step-by-step for building/editing a menu in CFC. PHG-specific workflow.', system_name:'NCR CFC', sort_order:4 },
+  // Week 4
+  { week:4, title:'R365 orientation — full system walkthrough with Bill', description:'Walk through every module PHG actively uses: GL, AP, inventory, recipe costing, reporting.', system_name:'Restaurant365 (R365)', sort_order:1 },
+  { week:4, title:'R365 recipe configuration deep dive', description:'Bill flagged this as a current pain point. Understand how PHG builds and maintains recipes. Where are the friction points?', system_name:'Restaurant365 (R365)', sort_order:2 },
+  { week:4, title:'R365 — run a period close walkthrough', description:'Shadow the accounting close process in R365. Understand timing, who does what, and what reports get pulled.', system_name:'Restaurant365 (R365)', sort_order:3 },
+  { week:4, title:'Understand Aloha-to-R365 data flow', description:'How do sales data flow from Aloha into R365? What\'s automated vs. manual? Where do errors show up?', system_name:'Restaurant365 (R365)', sort_order:4 },
+  // Week 5
+  { week:5, title:'HotSchedules / Fourth admin training', description:'How is PHG\'s schedule built? What\'s the approval workflow? How does labor data flow to payroll and R365?', system_name:'HotSchedules / Fourth', sort_order:1 },
+  { week:5, title:'Payroll system orientation', description:'What payroll platform does PHG use? How does it integrate with HotSchedules and R365? What does the weekly payroll process look like?', system_name:'Payroll Systems', sort_order:2 },
+  { week:5, title:'M365 admin center — review PHG\'s current setup', description:'Audit current M365 configuration: Teams, SharePoint, OneDrive, email. Document what\'s in place and any gaps.', system_name:'Microsoft 365', sort_order:3 },
+  { week:5, title:'Write SOP: Weekly scheduling process in HotSchedules', description:'Document the schedule build, approval, and publish workflow used at PHG locations.', system_name:'HotSchedules / Fourth', sort_order:4 },
+  // Week 6
+  { week:6, title:'Network infrastructure walkthrough with IT vendor', description:'Understand PHG\'s network topology across restaurant locations. Who is the managed IT provider? What does support look like?', system_name:'Network Infrastructure', sort_order:1 },
+  { week:6, title:'Camera / surveillance system training', description:'Learn the camera admin interface. How does monitoring work? What are the retention policies?', system_name:'Camera / Surveillance Systems', sort_order:2 },
+  { week:6, title:'AV systems orientation at a location', description:'On-site at a Ruth\'s Chris to understand the AV setup: music, screens, private dining. Who installs and supports it?', system_name:'AV Systems', sort_order:3 },
+  { week:6, title:'Payment processing — reconciliation walkthrough', description:'How does PHG reconcile card payments? What processor, what reporting cadence, how do disputes get handled?', system_name:'Payment Processing', sort_order:4 },
+  // Week 7
+  { week:7, title:'OpenTable / Resy admin — configuration and reporting', description:'How is the reservation system configured? What reports does leadership pull? How does it tie to private dining?', system_name:'OpenTable / Resy / SevenRooms', sort_order:1 },
+  { week:7, title:'GoDaddy — audit all PHG web properties', description:'Document all domains and sites in GoDaddy. What\'s the publishing process for updates? Who currently touches this?', system_name:'GoDaddy (Website Management)', sort_order:2 },
+  { week:7, title:'Write SOP: R365 recipe costing update process', description:'Document how PHG updates recipe costs when ingredient prices change. This was Bill\'s flagged pain point.', system_name:'Restaurant365 (R365)', sort_order:3 },
+  { week:7, title:'Identify any integration gaps or manual hand-offs between systems', description:'Map where data moves manually between systems. Flag for future automation opportunities.', system_name:'All Systems', sort_order:4 },
+  // Week 8
+  { week:8, title:'Full systems competency self-assessment', description:'Update all system proficiency ratings. Where am I now vs. where I started? What still needs work?', system_name:'All Systems', sort_order:1 },
+  { week:8, title:'Finalize all drafted SOPs — get Bill\'s approval', description:'Review every SOP draft with Bill. Revise and mark approved. This is the knowledge base handoff.', system_name:'All Systems', sort_order:2 },
+  { week:8, title:'Present 90-day plan to ownership', description:'Based on what I\'ve learned, build and present a 90-day roadmap for systems improvements and any identified quick wins.', system_name:'All Systems', sort_order:3 },
+  { week:8, title:'Bill transition milestone: independent system operation', description:'At the end of Week 8, Jimmy should be operating all systems independently. Bill moves to consulting role.', system_name:'All Systems', sort_order:4 },
+];
+
+// ============================================================
+// STATE
+// ============================================================
+let systems = [];
+let tasks = [];
+let sops = [];
+let logs = [];
+let activeView = 'overview';
+let activeCategory = 'All';
+let editingSopId = null;
+
+// ============================================================
+// NAV
+// ============================================================
+document.querySelectorAll('.nav-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    const view = tab.dataset.view;
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.getElementById('view-' + view).classList.add('active');
+    activeView = view;
+  });
+});
+
+// ============================================================
+// SUPABASE HELPERS
+// ============================================================
+async function fetchAll() {
+  const [s, t, so, l] = await Promise.all([
+    db.from('phg_systems').select('*').order('sort_order').order('name'),
+    db.from('phg_training_tasks').select('*').order('week').order('sort_order'),
+    db.from('phg_sops').select('*').order('created_at', { ascending: false }),
+    db.from('phg_knowledge_log').select('*').order('created_at', { ascending: false }),
+  ]);
+  systems = s.data || [];
+  tasks = t.data || [];
+  sops = so.data || [];
+  logs = l.data || [];
+}
+
+async function seedIfEmpty() {
+  const { data } = await db.from('phg_systems').select('id').limit(1);
+  if (data && data.length === 0) {
+    await db.from('phg_systems').insert(SEED_SYSTEMS);
+    await db.from('phg_training_tasks').insert(SEED_TASKS);
+  }
+}
+
+// ============================================================
+// RENDER OVERVIEW
+// ============================================================
+function renderOverview() {
+  document.getElementById('stat-systems').textContent = systems.length;
+  const avg = systems.length ? (systems.reduce((s,x) => s + x.current_level, 0) / systems.length).toFixed(1) : '—';
+  document.getElementById('stat-avg-level').textContent = avg;
+  const done = tasks.filter(t => t.status === 'done').length;
+  document.getElementById('stat-tasks-done').textContent = done;
+  document.getElementById('stat-tasks-sub').textContent = `of ${tasks.length} completed`;
+  document.getElementById('stat-sops').textContent = sops.length;
+
+  // Category breakdown
+  const cats = {};
+  systems.forEach(s => {
+    if (!cats[s.category]) cats[s.category] = { total: 0, sum: 0 };
+    cats[s.category].total++;
+    cats[s.category].sum += s.current_level;
+  });
+  const catEl = document.getElementById('category-breakdown');
+  catEl.innerHTML = Object.entries(cats).map(([cat, v]) => {
+    const avg = (v.sum / v.total).toFixed(1);
+    const pct = (v.sum / v.total / 4 * 100).toFixed(0);
+    const color = pct < 25 ? 'var(--red)' : pct < 50 ? 'var(--amber)' : pct < 75 ? 'var(--yellow)' : 'var(--green)';
+    return `
+      <div style="display:flex; align-items:center; gap:10px;">
+        <div style="width:80px; font-size:12px; font-weight:600; color:var(--navy); flex-shrink:0;">${cat}</div>
+        <div style="flex:1; height:8px; background:var(--border); border-radius:4px; overflow:hidden;">
+          <div style="height:100%; width:${pct}%; background:${color}; border-radius:4px; transition:width 0.5s;"></div>
+        </div>
+        <div style="width:30px; font-size:11px; color:var(--muted); text-align:right;">${avg}/4</div>
+      </div>`;
+  }).join('');
+}
+
+// ============================================================
+// RENDER SYSTEMS
+// ============================================================
+const LEVEL_LABELS = ['Not Started', 'Familiar', 'Intermediate', 'Proficient', 'Expert'];
+
+function renderSystems() {
+  const categories = ['All', ...new Set(systems.map(s => s.category))];
+  const filterBar = document.getElementById('category-filters');
+  filterBar.innerHTML = categories.map(c =>
+    `<div class="filter-chip ${c === activeCategory ? 'active' : ''}" onclick="setCategory('${c}')">${c}</div>`
+  ).join('');
+
+  const filtered = activeCategory === 'All' ? systems : systems.filter(s => s.category === activeCategory);
+  const grid = document.getElementById('systems-grid');
+
+  if (!filtered.length) {
+    grid.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📋</div><div class="empty-state-text">No systems yet</div></div>';
+    return;
+  }
+
+  grid.innerHTML = filtered.map(s => {
+    const pips = [0,1,2,3].map(i => `<div class="level-pip ${i < s.current_level ? `filled-${s.current_level}` : ''}"></div>`).join('');
+    const billNote = s.bill_notes ? `<div class="bill-note-box"><div class="bill-note-label">Bill's Note</div>${s.bill_notes}</div>` : '';
+    return `
+      <div class="system-card" onclick="editSystem('${s.id}')">
+        <div class="system-card-header">
+          <div class="system-name">${s.name}</div>
+          <div class="category-badge">${s.category}</div>
+        </div>
+        <div class="system-desc">${s.description || '<em style="color:var(--border)">No description yet</em>'}</div>
+        <div class="level-bar">${pips}</div>
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-top:8px;">
+          <span class="level-label level-label-${s.current_level}">${LEVEL_LABELS[s.current_level]}</span>
+          <span style="font-size:11px; color:var(--muted);">Target: Expert</span>
+        </div>
+        ${s.jimmy_notes ? `<div class="system-notes">📝 ${s.jimmy_notes.substring(0,80)}${s.jimmy_notes.length > 80 ? '...' : ''}</div>` : ''}
+        ${billNote}
+      </div>`;
+  }).join('');
+}
+
+function setCategory(cat) {
+  activeCategory = cat;
+  renderSystems();
+}
+
+// ============================================================
+// RENDER TRAINING
+// ============================================================
+const WEEK_THEMES = {
+  1: 'Access, Orientation & Aloha Core',
+  2: 'NCR Deep Dive — CFC, Digital Ordering & Menus',
+  3: 'NCR Consumer Marketing & First SOPs',
+  4: 'Restaurant365 — Deep Operational Training',
+  5: 'Scheduling, Payroll & Microsoft 365',
+  6: 'Network, Cameras, AV & Payments',
+  7: 'Reservations, Web Properties & Integration Audit',
+  8: 'Competency Assessment, SOP Approval & 90-Day Plan',
+};
+
+function renderTraining() {
+  const container = document.getElementById('training-weeks');
+  const weeks = [...new Set(tasks.map(t => t.week))].sort((a,b) => a-b);
+
+  container.innerHTML = weeks.map(w => {
+    const weekTasks = tasks.filter(t => t.week === w);
+    const done = weekTasks.filter(t => t.status === 'done').length;
+    const inProg = weekTasks.filter(t => t.status === 'in_progress').length;
+    const allDone = done === weekTasks.length;
+
+    const taskHTML = weekTasks.map(t => {
+      return `
+        <div class="task-item" id="task-${t.id}">
+          <div class="task-check ${t.status}" onclick="cycleTaskStatus('${t.id}')"></div>
+          <div class="task-content">
+            <div class="task-title ${t.status === 'done' ? 'done-text' : ''}">${t.title}</div>
+            ${t.description ? `<div class="task-desc">${t.description}</div>` : ''}
+            ${t.system_name ? `<div class="task-system">🔧 ${t.system_name}</div>` : ''}
+            ${t.bill_notes ? `<div class="bill-note-box" style="margin-top:6px;"><div class="bill-note-label">Bill's Note</div>${t.bill_notes}</div>` : ''}
+          </div>
+        </div>`;
+    }).join('');
+
+    const doneColor = allDone ? 'var(--green)' : done > 0 ? 'var(--amber)' : 'var(--muted)';
+    return `
+      <div class="week-block" id="week-block-${w}">
+        <div class="week-header" onclick="toggleWeek(${w})">
+          <div class="week-header-left">
+            <div class="week-num">Week ${w}</div>
+            <div>
+              <div class="week-title">${WEEK_THEMES[w] || 'Training'}</div>
+            </div>
+          </div>
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div class="week-progress" style="color:${doneColor};">${done}/${weekTasks.length} done</div>
+            <div class="week-chevron">▾</div>
+          </div>
+        </div>
+        <div class="week-tasks">${taskHTML}</div>
+      </div>`;
+  }).join('');
+
+  // Open first week by default
+  const firstBlock = document.querySelector('.week-block');
+  if (firstBlock) firstBlock.classList.add('open');
+}
+
+function toggleWeek(w) {
+  const block = document.getElementById('week-block-' + w);
+  block.classList.toggle('open');
+}
+
+async function cycleTaskStatus(id) {
+  const task = tasks.find(t => t.id === id);
+  if (!task) return;
+  const next = { todo: 'in_progress', in_progress: 'done', done: 'todo' };
+  const newStatus = next[task.status];
+  const update = { status: newStatus };
+  if (newStatus === 'done') update.completed_at = new Date().toISOString();
+  if (newStatus !== 'done') update.completed_at = null;
+  await db.from('phg_training_tasks').update(update).eq('id', id);
+  task.status = newStatus;
+  task.completed_at = update.completed_at || null;
+  renderTraining();
+  renderOverview();
+  toast('Task updated', 'success');
+}
+
+// ============================================================
+// RENDER SOPs
+// ============================================================
+const SOP_STATUS_LABEL = { draft: 'Draft', review: 'Needs Review', approved: 'Approved' };
+
+function renderSops() {
+  const grid = document.getElementById('sops-grid');
+  if (!sops.length) {
+    grid.innerHTML = `
+      <div class="empty-state" style="grid-column:1/-1;">
+        <div class="empty-state-icon">📄</div>
+        <div class="empty-state-text">No SOPs yet — they get built as you learn each system.</div>
+      </div>`;
+    return;
+  }
+  grid.innerHTML = sops.map(s => `
+    <div class="sop-card" onclick="editSop('${s.id}')">
+      <div style="display:flex; align-items:flex-start; gap:10px;">
+        <div class="sop-status-dot ${s.status}"></div>
+        <div style="flex:1;">
+          <div style="font-weight:600; font-size:14px; color:var(--navy); margin-bottom:2px;">${s.title}</div>
+          ${s.system_name ? `<div style="font-size:11px; color:var(--blue); font-weight:500; margin-bottom:6px;">🔧 ${s.system_name}</div>` : ''}
+          <div style="font-size:11px; color:var(--muted);">${SOP_STATUS_LABEL[s.status]} · ${formatDate(s.updated_at || s.created_at)}</div>
+          ${s.content ? `<div style="font-size:12px; color:var(--muted); margin-top:6px; line-height:1.5;">${s.content.substring(0,100)}${s.content.length > 100 ? '...' : ''}</div>` : ''}
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+// ============================================================
+// RENDER KNOWLEDGE LOG
+// ============================================================
+function renderLog() {
+  const el = document.getElementById('knowledge-log');
+  if (!logs.length) {
+    el.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-state-icon">💬</div>
+        <div class="empty-state-text">No entries yet. Add things Bill tells you, things you discover, questions and answers.</div>
+      </div>`;
+    return;
+  }
+  el.innerHTML = logs.map(l => `
+    <div class="log-entry">
+      <div class="log-avatar ${l.author.toLowerCase()}">${l.author.charAt(0)}</div>
+      <div class="log-body">
+        <div class="log-header">
+          <span class="log-author">${l.author}</span>
+          ${l.system_name ? `<span class="log-system-tag">${l.system_name}</span>` : ''}
+          <span class="log-date">${formatDate(l.created_at)}</span>
+        </div>
+        <div class="log-title">${l.title}</div>
+        ${l.content ? `<div class="log-content">${l.content}</div>` : ''}
+      </div>
+    </div>`).join('');
+}
+
+// ============================================================
+// SYSTEM MODAL
+// ============================================================
+let selectedLevel = 0;
+
+function openSystemModal(sys) {
+  selectedLevel = sys ? sys.current_level : 0;
+  document.getElementById('system-id').value = sys ? sys.id : '';
+  document.getElementById('system-modal-title').textContent = sys ? 'Edit System' : 'Add System';
+  document.getElementById('system-name').value = sys ? sys.name : '';
+  document.getElementById('system-category').value = sys ? sys.category : 'POS';
+  document.getElementById('system-description').value = sys ? sys.description : '';
+  document.getElementById('system-resources').value = sys ? sys.resources : '';
+  document.getElementById('system-jimmy-notes').value = sys ? sys.jimmy_notes : '';
+  document.getElementById('system-bill-notes').value = sys ? sys.bill_notes : '';
+  document.getElementById('system-level').value = selectedLevel;
+  updateLevelSelector(selectedLevel);
+  openModal('system-modal');
+}
+
+function editSystem(id) {
+  const sys = systems.find(s => s.id === id);
+  if (sys) openSystemModal(sys);
+}
+
+function selectLevel(level) {
+  selectedLevel = level;
+  document.getElementById('system-level').value = level;
+  updateLevelSelector(level);
+}
+
+function updateLevelSelector(level) {
+  document.querySelectorAll('.level-option').forEach(opt => {
+    opt.className = 'level-option';
+    if (parseInt(opt.dataset.level) === level) opt.classList.add(`selected-level-${level}`);
+  });
+}
+
+async function saveSystem() {
+  const id = document.getElementById('system-id').value;
+  const data = {
+    name: document.getElementById('system-name').value.trim(),
+    category: document.getElementById('system-category').value,
+    description: document.getElementById('system-description').value.trim(),
+    current_level: parseInt(document.getElementById('system-level').value),
+    resources: document.getElementById('system-resources').value.trim(),
+    jimmy_notes: document.getElementById('system-jimmy-notes').value.trim(),
+    bill_notes: document.getElementById('system-bill-notes').value.trim(),
+    updated_at: new Date().toISOString(),
+  };
+  if (!data.name) return toast('Please enter a system name', 'error');
+  if (id) {
+    const { error } = await db.from('phg_systems').update(data).eq('id', id);
+    if (error) return toast('Error saving: ' + error.message, 'error');
+    const idx = systems.findIndex(s => s.id === id);
+    if (idx >= 0) systems[idx] = { ...systems[idx], ...data };
+  } else {
+    const { data: inserted, error } = await db.from('phg_systems').insert(data).select().single();
+    if (error) return toast('Error saving: ' + error.message, 'error');
+    systems.push(inserted);
+  }
+  closeModal('system-modal');
+  renderSystems();
+  renderOverview();
+  toast('System saved', 'success');
+}
+
+// ============================================================
+// TASK MODAL
+// ============================================================
+function openTaskModal() {
+  document.getElementById('task-title').value = '';
+  document.getElementById('task-description').value = '';
+  document.getElementById('task-system').value = '';
+  openModal('task-modal');
+}
+
+async function saveTask() {
+  const data = {
+    week: parseInt(document.getElementById('task-week').value),
+    title: document.getElementById('task-title').value.trim(),
+    description: document.getElementById('task-description').value.trim(),
+    system_name: document.getElementById('task-system').value.trim(),
+    status: 'todo',
+    sort_order: 99,
+  };
+  if (!data.title) return toast('Please enter a task title', 'error');
+  const { data: inserted, error } = await db.from('phg_training_tasks').insert(data).select().single();
+  if (error) return toast('Error: ' + error.message, 'error');
+  tasks.push(inserted);
+  closeModal('task-modal');
+  renderTraining();
+  toast('Task added', 'success');
+}
+
+// ============================================================
+// SOP MODAL
+// ============================================================
+function openSopModal(sop) {
+  editingSopId = sop ? sop.id : null;
+  document.getElementById('sop-id').value = sop ? sop.id : '';
+  document.getElementById('sop-modal-title').textContent = sop ? 'Edit SOP' : 'New SOP';
+  document.getElementById('sop-title').value = sop ? sop.title : '';
+  document.getElementById('sop-system').value = sop ? sop.system_name : '';
+  document.getElementById('sop-status').value = sop ? sop.status : 'draft';
+  document.getElementById('sop-content').value = sop ? sop.content : '';
+  document.getElementById('sop-delete-btn').style.display = sop ? 'inline-flex' : 'none';
+  openModal('sop-modal');
+}
+
+function editSop(id) {
+  const sop = sops.find(s => s.id === id);
+  if (sop) openSopModal(sop);
+}
+
+async function saveSop() {
+  const id = document.getElementById('sop-id').value;
+  const data = {
+    title: document.getElementById('sop-title').value.trim(),
+    system_name: document.getElementById('sop-system').value.trim(),
+    status: document.getElementById('sop-status').value,
+    content: document.getElementById('sop-content').value.trim(),
+    updated_at: new Date().toISOString(),
+  };
+  if (!data.title) return toast('Please enter a title', 'error');
+  if (id) {
+    const { error } = await db.from('phg_sops').update(data).eq('id', id);
+    if (error) return toast('Error: ' + error.message, 'error');
+    const idx = sops.findIndex(s => s.id === id);
+    if (idx >= 0) sops[idx] = { ...sops[idx], ...data };
+  } else {
+    const { data: inserted, error } = await db.from('phg_sops').insert(data).select().single();
+    if (error) return toast('Error: ' + error.message, 'error');
+    sops.unshift(inserted);
+  }
+  closeModal('sop-modal');
+  renderSops();
+  renderOverview();
+  toast('SOP saved', 'success');
+}
+
+async function deleteSop() {
+  const id = document.getElementById('sop-id').value;
+  if (!id || !confirm('Delete this SOP?')) return;
+  await db.from('phg_sops').delete().eq('id', id);
+  sops = sops.filter(s => s.id !== id);
+  closeModal('sop-modal');
+  renderSops();
+  toast('SOP deleted');
+}
+
+// ============================================================
+// LOG MODAL
+// ============================================================
+function openLogModal() {
+  document.getElementById('log-title').value = '';
+  document.getElementById('log-content').value = '';
+  document.getElementById('log-system').value = '';
+  openModal('log-modal');
+}
+
+async function saveLog() {
+  const data = {
+    author: document.getElementById('log-author').value,
+    system_name: document.getElementById('log-system').value.trim(),
+    title: document.getElementById('log-title').value.trim(),
+    content: document.getElementById('log-content').value.trim(),
+  };
+  if (!data.title) return toast('Please enter a title', 'error');
+  const { data: inserted, error } = await db.from('phg_knowledge_log').insert(data).select().single();
+  if (error) return toast('Error: ' + error.message, 'error');
+  logs.unshift(inserted);
+  closeModal('log-modal');
+  renderLog();
+  toast('Entry added', 'success');
+}
+
+// ============================================================
+// MODAL HELPERS
+// ============================================================
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-overlay').forEach(el => {
+  el.addEventListener('click', e => { if (e.target === el) el.classList.remove('open'); });
+});
+
+// ============================================================
+// UTILS
+// ============================================================
+function formatDate(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+let toastTimeout;
+function toast(msg, type = 'success') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'toast show ' + type;
+  clearTimeout(toastTimeout);
+  toastTimeout = setTimeout(() => el.classList.remove('show'), 2500);
+}
+
+// ============================================================
+// INIT
+// ============================================================
+async function init() {
+  try {
+    await seedIfEmpty();
+    await fetchAll();
+    renderOverview();
+    renderSystems();
+    renderTraining();
+    renderSops();
+    renderLog();
+    document.getElementById('sync-status').textContent = 'Live';
+  } catch (e) {
+    document.getElementById('sync-status').textContent = 'Offline';
+    console.error(e);
+  }
+}
+
+init();
+</script>
+</body>
+</html>
